@@ -2,6 +2,8 @@
 buildscript {
     repositories {
         google()
+        mavenCentral()
+        gradlePluginPortal()
         maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     }
     dependencies {
@@ -17,6 +19,8 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint").version("11.5.1")
     id("org.sonarqube").version("3.5.0.2730")
     id("com.github.ben-manes.versions").version("0.46.0")
+    id("com.android.library") version "8.2.2" apply false
+    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
 }
 
 sonarqube {
@@ -24,7 +28,6 @@ sonarqube {
         val branch = System.getenv("GIT_BRANCH")
         val targetBranch = System.getenv("GIT_BRANCH_DEST")
         val pullRequestId = System.getenv("PULL_REQUEST")
-
 
         property("sonar.projectKey", "dhis2_dhis2-android-capture-app")
         property("sonar.organization", "dhis2")

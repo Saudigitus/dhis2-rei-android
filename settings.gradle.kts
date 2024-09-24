@@ -5,3 +5,11 @@ include(
     ":stock-usecase"
 )
 include(":dhis2-mobile-program-rules")
+include(":support-module")
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
