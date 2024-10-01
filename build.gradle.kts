@@ -1,3 +1,5 @@
+import java.util.Locale
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
@@ -20,7 +22,6 @@ plugins {
     id("org.sonarqube").version("3.5.0.2730")
     id("com.github.ben-manes.versions").version("0.46.0")
     id("com.android.library") version "8.2.2" apply false
-    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
 }
 
 sonarqube {
@@ -46,7 +47,7 @@ sonarqube {
 
 val isNonStable: (String) -> Boolean = { version ->
     val stableKeyword =
-        listOf("RELEASE", "FINAL", "GA").any { it -> version.toUpperCase().contains(it) }
+        listOf("RELEASE", "FINAL", "GA").any { it -> version.uppercase().contains(it) }
     val regex = """^[0-9,.v-]+(-r)?$""".toRegex()
     !stableKeyword && !(version matches regex)
 }
@@ -116,7 +117,7 @@ allprojects {
 }
 
 tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 

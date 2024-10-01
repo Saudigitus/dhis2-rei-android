@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.android.library")
+    kotlin("android")
+    alias(libs.plugins.kotlin.compose.compiler)
 }
 
 android {
@@ -28,12 +29,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
-
+    implementation(project(":commons"))
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)
     implementation(libs.google.material)

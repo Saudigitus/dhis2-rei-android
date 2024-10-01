@@ -13,3 +13,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+include(":tracker")
