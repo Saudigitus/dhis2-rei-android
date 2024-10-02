@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.components
+package com.saudigitus.support_module.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

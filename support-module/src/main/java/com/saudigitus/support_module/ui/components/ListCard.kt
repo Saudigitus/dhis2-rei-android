@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.components
+package com.saudigitus.support_module.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -31,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.viewtest.R
+import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.MenuScreen
 import com.saudigitus.support_module.ui.components.CustomCard
 
@@ -91,5 +93,5 @@ fun ListCard(imageResId: Int, title: String, subtitle: String, icon: androidx.co
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
-    ListCard(imageResId = R.drawable.manual_icon, title = "Manual title here alfa omega beta", subtitle = "Manual subtitle here alfa", icon = Icons.Default.KeyboardArrowRight)
+    ListCard(imageResId = R.drawable.manual_icon, title = "Manual title here alfa omega beta", subtitle = "Manual subtitle here alfa", icon = Icons.Default.ArrowDownward)
 }

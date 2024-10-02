@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.theme
+package com.saudigitus.support_module.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

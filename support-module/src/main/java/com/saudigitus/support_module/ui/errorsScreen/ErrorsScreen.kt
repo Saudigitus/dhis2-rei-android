@@ -30,10 +30,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.viewtest.R
-import com.example.viewtest.ui.components.BasicApp
-import com.example.viewtest.ui.components.ErrorComponent
-import com.example.viewtest.ui.components.ListCard
+import com.saudigitus.support_module.R
+import com.saudigitus.support_module.ui.components.BasicApp
+import com.saudigitus.support_module.ui.components.ErrorComponent
+import com.saudigitus.support_module.ui.components.ListCard
 import com.saudigitus.support_module.ui.MenuScreen
 
 @Composable

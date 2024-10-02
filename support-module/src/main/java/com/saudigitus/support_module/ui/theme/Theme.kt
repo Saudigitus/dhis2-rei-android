@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.theme
+package com.saudigitus.support_module.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -64,7 +64,7 @@ fun ViewTestTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+
         content = content
     )
 }

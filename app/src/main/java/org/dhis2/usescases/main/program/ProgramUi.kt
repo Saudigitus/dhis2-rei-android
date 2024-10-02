@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.saudigitus.support_module.ui.MenuScreen
 import org.dhis2.R
 import org.dhis2.commons.bindings.addIf
 import org.dhis2.commons.date.toDateSpan
@@ -146,6 +147,7 @@ fun ProgramList(
                 ProgressIndicator(type = ProgressIndicatorType.CIRCULAR_SMALL)
             }
         }
+        MenuScreen()
     }
 }
 

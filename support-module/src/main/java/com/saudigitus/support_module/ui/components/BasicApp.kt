@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.components
+package com.saudigitus.support_module.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -51,7 +51,7 @@ fun BasicApp(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFF2196F3) // Blue background color
                 )
             )

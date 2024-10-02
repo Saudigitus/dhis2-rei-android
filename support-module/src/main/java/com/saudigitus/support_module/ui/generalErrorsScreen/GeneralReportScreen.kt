@@ -1,4 +1,4 @@
-package com.example.viewtest.ui.manualScreen
+package com.saudigitus.support_module.ui.manualScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Send
 
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -30,9 +32,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.viewtest.R
-import com.example.viewtest.ui.components.BasicApp
-import com.example.viewtest.ui.components.ErrorComponent
+import com.saudigitus.support_module.R
+import com.saudigitus.support_module.ui.components.BasicApp
+import com.saudigitus.support_module.ui.components.ErrorComponent
 
 @Composable
 fun GeneralReportScreen(
@@ -42,7 +44,7 @@ fun GeneralReportScreen(
     BasicApp(title = "Relatar erro de sincronização",
         fab = {
             ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Filled.Send, contentDescription = "Send") }, // Icon on the FAB
+                icon = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send") }, // Icon on the FAB
                 text = { Text("Enviar") }, // Text on the FAB
                 onClick = { /* Action when clicked */ },
                 containerColor = Color.White, // Background color of the FAB
