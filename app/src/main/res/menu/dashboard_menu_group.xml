@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_help"
         android:title="@string/showHelp" />
     <item
+      android:id="@+id/transferTei"
+      android:icon="@drawable/ic_transfer"
+      android:title="@string/transfer" />
+    <item
         android:id="@+id/markForFollowUp"
         android:icon="@drawable/ic_flag"
         android:title="@string/mark_follow_up" />
@@ -23,7 +27,7 @@
     <item
         android:id="@+id/showTimeline"
         android:icon="@drawable/ic_list_view"
-        android:title="@string/show_events_timeline"/>
+        android:title="@string/show_event_label_timeline"/>
     <item
         android:id="@+id/complete"
         android:icon="@drawable/ic_lock_menu"

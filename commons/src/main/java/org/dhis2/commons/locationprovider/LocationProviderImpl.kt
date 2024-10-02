@@ -8,19 +8,18 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Bundle
 import androidx.core.app.ActivityCompat
 
 private const val FUSED_LOCATION_PROVIDER = "fused"
 
-class LocationProviderImpl(val context: Context) : LocationProvider {
+open class LocationProviderImpl(val context: Context) : LocationProvider {
 
-    private val locationManager: LocationManager by lazy { initLocationManager() }
+    private val locationManager: LocationManager by lazy {
+        context.getSystemService(LOCATION_SERVICE) as LocationManager
+    }
 
     private val locationProvider: String by lazy { initLocationProvider() }
-
-    private fun initLocationManager(): LocationManager {
-        return context.getSystemService(LOCATION_SERVICE) as LocationManager
-    }
 
     private fun initLocationProvider(): String {
         return FUSED_LOCATION_PROVIDER
@@ -52,17 +51,30 @@ class LocationProviderImpl(val context: Context) : LocationProvider {
     @SuppressLint("MissingPermission")
     private fun requestLocationUpdates(onNewLocation: (Location) -> Unit) {
         if (hasPermission()) {
-            locationListener = LocationListener { location ->
-                // TODO: (To improve accuracy check that location.accuracy is less than 5m)
-                onNewLocation(location)
-                stopLocationUpdates()
+            locationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    onNewLocation(location)
+                }
+
+                override fun onProviderEnabled(provider: String) {
+                    // Need implementation for compatibility
+                }
+
+                override fun onProviderDisabled(provider: String) {
+                    // Need implementation for compatibility
+                }
+
+                @Deprecated("Deprecated in Java")
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                    // Need implementation for compatibility
+                }
             }
 
             locationManager.requestLocationUpdates(
-                locationProvider,
-                1000L,
-                5f,
-                locationListener!!,
+                LocationManager.GPS_PROVIDER,
+                1000,
+                1f,
+                requireNotNull(locationListener),
             )
         }
     }
