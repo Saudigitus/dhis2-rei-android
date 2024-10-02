@@ -19,10 +19,7 @@ import com.saudigitus.support_module.ui.components.CustomCard
 
 
 @Composable
-fun MenuScreen(
-    //viewModel: MenuViewModel,
-    //onBack: () -> Unit
-) {
+fun MenuScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
