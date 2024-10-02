@@ -979,4 +979,8 @@
     <string name="hide_fields">Hide fields</string>
     <string name="importing_successful">Import successful</string>
     <string name="section_misconfigured">This section is misconfigured.\nContact your administrator.</string>
+
+    <string name="enrollment_org_unit">Enrollment org unit</string>
+    <string name="event_event">Event event</string>
+    <string name="navigation_events">Navigation events</string>
 </resources>

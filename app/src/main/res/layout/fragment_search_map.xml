@@ -59,8 +59,7 @@
             android:paddingEnd="8dp"
             android:paddingBottom="20dp"
             app:layout_constraintBottom_toBottomOf="@id/mapView"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:listitem="@layout/item_carousel_tei" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

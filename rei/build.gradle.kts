@@ -3,27 +3,26 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
     id("kotlinx-serialization")
+    id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
     alias(libs.plugins.kotlin.compose.compiler)
 }
-apply(from = "${project.rootDir}/jacoco/jacoco.gradle.kts")
 
 android {
+    namespace = "org.saudigitus.rei"
     compileSdk = libs.versions.sdk.get().toInt()
-    namespace = "org.dhis2.composetable"
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-        testOptions.targetSdk = libs.versions.sdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        getByName("debug") {
-        }
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -31,15 +30,10 @@ android {
             )
         }
     }
-    flavorDimensions += listOf("default")
-
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    buildFeatures {
-        compose = true
     }
 }
 
@@ -50,9 +44,12 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.bundles.table.implementation)
-    debugImplementation(libs.bundles.table.debugImplementation)
-    testImplementation(libs.bundles.table.test)
-    androidTestImplementation(libs.bundles.table.androidTest)
-    implementation(libs.dhis2.mobile.designsystem)
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(project(":commons"))
+    implementation(libs.dagger.hilt.android)
+
+    kapt(libs.dagger.compiler)
+    kapt(libs.dagger.hilt.android.compiler)
+
+    coreLibraryDesugaring(libs.desugar)
 }
