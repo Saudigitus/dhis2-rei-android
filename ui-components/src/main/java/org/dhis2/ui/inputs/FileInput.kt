@@ -42,11 +42,11 @@ import org.hisp.dhis.mobile.ui.designsystem.component.IconButton
 @Composable
 fun BoxedInput(
     leadingIcon: @Composable
-    (modifier: Modifier) -> Unit,
+    (Modifier) -> Unit,
     trailingIcons: @Composable
     RowScope.() -> Unit,
     content: @Composable
-    (modifier: Modifier) -> Unit,
+    (Modifier) -> Unit,
 ) {
     Surface(
         modifier = Modifier

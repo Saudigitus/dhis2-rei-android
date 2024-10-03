@@ -6,3 +6,4 @@ include(
 )
 include(":dhis2-mobile-program-rules")
 include(":tracker")
+include(":rei")

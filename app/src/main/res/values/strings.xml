@@ -986,4 +986,8 @@
     <string name="transfer_tei_org_sheet_title">Transfer %s</string>
     <string name="transfer_tei_org_sheet_description">From %s to…</string>
     <string name="successfully_transferred">Successfully transferred</string>
+
+    <string name="enrollment_org_unit">Enrollment org unit</string>
+    <string name="event_event">Event event</string>
+    <string name="navigation_events">Navigation events</string>
 </resources>
