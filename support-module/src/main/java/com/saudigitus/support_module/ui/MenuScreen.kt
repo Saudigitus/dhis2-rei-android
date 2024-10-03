@@ -25,7 +25,7 @@ fun MenuScreen() {
             .fillMaxWidth()
             .height(170.dp)
             .background(color = Color(0xFFFFFFFF))
-            .padding(10.dp),
+            .padding(5.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
