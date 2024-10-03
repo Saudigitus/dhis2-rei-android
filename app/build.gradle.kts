@@ -74,7 +74,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.dhis2"
+        applicationId = "com.dhis2.rei"
         compileSdk = libs.versions.sdk.get().toInt()
         targetSdk = libs.versions.sdk.get().toInt()
         minSdk = libs.versions.minSdk.get().toInt()
@@ -161,21 +161,21 @@ android {
 
     productFlavors {
         create("dhis") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.rei"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
         }
 
         create("dhisPlayServices") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.rei"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
         }
 
         create("dhisUITesting") {
-            applicationId = "com.dhis2"
+            applicationId = "com.dhis2.rei"
             dimension = "default"
             versionCode = libs.versions.vCode.get().toInt()
             versionName = libs.versions.vName.get()
@@ -270,6 +270,8 @@ dependencies {
     implementation(libs.androidx.work)
     implementation(libs.androidx.workrx)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.biometric)
+    implementation(libs.androidx.material3)
     implementation(libs.google.guava)
     implementation(libs.github.pinlock)
     implementation(libs.github.fancyshowcase)

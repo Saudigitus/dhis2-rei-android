@@ -14,3 +14,4 @@ pluginManagement {
     }
 }
 include(":tracker")
+include(":rei")
