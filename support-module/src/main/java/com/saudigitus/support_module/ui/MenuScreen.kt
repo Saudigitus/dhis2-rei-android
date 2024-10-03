@@ -37,9 +37,9 @@ fun MenuScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             // First Card
-            CustomCard(imageResId = R.drawable.manual_icon, title = "Manuais")
+            CustomCard(imageResId = R.drawable.manual_icon, title = R.string.manuals.toString())
             // Second Card
-            CustomCard(imageResId = R.drawable.support, title = "Supporte")
+            CustomCard(imageResId = R.drawable.support, title = R.string.support.toString())
         }
     }
 }

@@ -28,7 +28,7 @@ fun ManualScreen(
     //viewModel: MenuViewModel,
     //onBack: () -> Unit
 ) {
-    BasicApp(title = "Manuais", content = {
+    BasicApp(title = R.string.manuals.toString(), content = {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -38,7 +38,7 @@ fun ManualScreen(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = "Manuais de utilizadores",
+                text = R.string.manual_title.toString(),
                 fontSize = 16.sp,
                 color = Color.Gray
             )

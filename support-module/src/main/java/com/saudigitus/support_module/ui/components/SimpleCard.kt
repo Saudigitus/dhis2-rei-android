@@ -52,7 +52,6 @@ fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVec
                 Text(
                     text = title,
                     fontSize = 14.sp,
-                    //fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     color = Color.Black
                 )

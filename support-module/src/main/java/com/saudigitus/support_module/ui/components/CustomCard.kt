@@ -44,7 +44,6 @@ fun CustomCard(imageResId: Int, title: String) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
-                //fontSize = 18.sp,
                 color = Color.Black
             )
         }
