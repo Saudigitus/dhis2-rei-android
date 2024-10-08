@@ -91,6 +91,10 @@ preference_ktx = "1.2.1"
 uiautomator = "2.2.0"
 maplibre = "10.2.0"
 material3Android = "1.3.0"
+navigationRuntimeKtx = "2.8.2"
+navigationCompose = "2.8.2"
+lifecycleRuntimeKtx = "2.8.6"
+composeBom = "2024.04.01"
 [libraries]
 gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlinPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -214,9 +218,15 @@ dispatcher-dispatchBOM = { group = "com.rickbusarow.dispatch", name = "dispatch-
 dispatcher-dispatchCore = { group = "com.rickbusarow.dispatch", name = "dispatch-core" }
 dispatcher-dispatchEspresso = { group = "com.rickbusarow.dispatch", name = "dispatch-android-espresso", version = "1.0.0-beta10" }
 deprecated-autoValueParcel = { group = "com.ryanharter.auto.value", name = "auto-value-parcel", version.ref = "autovalueparcel" }
-androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" } #TODO: Remove alongside AutoValue
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" } #TODO: Remove alongside AutoValue
 [plugins]
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [bundles]
 uicomponents-implementation = ["androidx-coreKtx", "androidx-material3", "google-material", "lottie-compose", "dhis2-mobile-designsystem"]

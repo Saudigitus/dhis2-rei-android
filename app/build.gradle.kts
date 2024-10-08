@@ -284,6 +284,7 @@ dependencies {
     implementation(libs.analytics.customactivityoncrash)
     implementation(platform(libs.dispatcher.dispatchBOM))
     implementation(libs.dispatcher.dispatchCore)
+    implementation(libs.androidx.navigation.compose)
 
     coreLibraryDesugaring(libs.desugar)
 

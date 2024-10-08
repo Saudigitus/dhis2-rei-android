@@ -22,6 +22,7 @@ plugins {
     id("org.sonarqube").version("3.5.0.2730")
     id("com.github.ben-manes.versions").version("0.46.0")
     id("com.android.library") version "8.2.2" apply false
+    alias(libs.plugins.kotlin.android) apply false
 }
 
 sonarqube {

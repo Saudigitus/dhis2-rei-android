@@ -13,11 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.saudigitus.support_module.ui.components.SimpleCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupportScreen(
+    navController: NavHostController,
     onBack: () -> Unit = {} // Placeholder for back action
 ) {
     Scaffold(
@@ -86,5 +88,5 @@ fun SupportScreen(
 @Preview(showBackground = true)
 @Composable
 fun SupportPreview() {
-    SupportScreen()
+    //SupportScreen()
 }
