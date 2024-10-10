@@ -20,13 +20,11 @@ fun AppNavHost(navController: NavHostController, route: String, activity: Activi
         }
         composable(Screen.Manuals.route) {
             ManualScreen(navController = navController, onBack = {
-                Timber.d("Back button clicked 01")
                 activity.finish()
             })
         }
         composable(Screen.Support.route) {
             SupportScreen(navController = navController, onBack = {
-                Timber.d("Back button clicked 02")
                 activity.finish()
             })
         }

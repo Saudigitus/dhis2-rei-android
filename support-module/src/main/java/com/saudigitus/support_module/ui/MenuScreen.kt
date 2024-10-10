@@ -23,7 +23,9 @@ import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.CustomCard
 import android.content.Context
 import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import com.saudigitus.support_module.MainActivity
+import com.saudigitus.support_module.utils.Constants
 
 @Composable
 fun MenuScreen(context: Context) {
@@ -31,7 +33,7 @@ fun MenuScreen(context: Context) {
         modifier = Modifier
             .fillMaxWidth()
             .height(170.dp)
-            .background(color = Color(0xFFFFFFFF)),
+            .background(color = Color.White),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
@@ -49,7 +51,7 @@ fun MenuScreen(context: Context) {
                 title = stringResource(id = R.string.manuals),
                 onClick = {
                     val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra("screen", Screen.Manuals.route)
+                    intent.putExtra(Constants.SCREENS_KEY, Screen.Manuals.route)
                     context.startActivity(intent)
                 }
             )
@@ -59,7 +61,7 @@ fun MenuScreen(context: Context) {
                 title =stringResource(id =  R.string.support),
                 onClick = {
                     val intent = Intent(context, MainActivity::class.java)
-                    intent.putExtra("screen", Screen.Support.route)
+                    intent.putExtra(Constants.SCREENS_KEY, Screen.Support.route)
                     context.startActivity(intent)
                 }
             )
@@ -70,5 +72,5 @@ fun MenuScreen(context: Context) {
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
-    //MenuScreen()
+    MenuScreen(context = LocalContext.current)
 }

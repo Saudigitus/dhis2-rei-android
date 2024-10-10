@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.saudigitus.support_module.ui.Screen
 import com.saudigitus.support_module.ui.manualScreen.ManualScreen
+import com.saudigitus.support_module.utils.Constants
 import org.dhis2.ui.theme.Dhis2Theme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val screen = intent.extras?.getString("screen") ?: Screen.Menu.route
+            val screen = intent.extras?.getString(Constants.SCREENS_KEY) ?: Screen.Menu.route
             val navController = rememberNavController()
             Surface(
                 modifier = Modifier.fillMaxSize(),
