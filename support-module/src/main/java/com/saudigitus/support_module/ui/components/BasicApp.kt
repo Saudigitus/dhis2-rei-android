@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saudigitus.support_module.ui.theme.app_blue_color
 
 @JvmOverloads
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,7 +51,7 @@ fun BasicApp(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF2196F3) // Blue background color
+                    containerColor = app_blue_color // Blue background color
                 )
             )
         },
