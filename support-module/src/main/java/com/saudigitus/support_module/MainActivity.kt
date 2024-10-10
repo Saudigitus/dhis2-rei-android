@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                AppNavHost(navController = navController, route = screen)
+                AppNavHost(navController = navController, route = screen, activity = this)
             }
         }
     }
