@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saudigitus.support_module.ui.theme.app_blue_color
 
 @JvmOverloads
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +32,6 @@ fun BasicApp(
     fab:  (@Composable () -> Unit)? = null
 ) {
     Scaffold(
-        Modifier.background(Color(0xFF2196F3)),
         topBar = {
             TopAppBar(
                 title = {
@@ -51,7 +51,7 @@ fun BasicApp(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF2196F3) // Blue background color
+                    containerColor = app_blue_color // Blue background color
                 )
             )
         },
@@ -63,17 +63,14 @@ fun BasicApp(
     ) { paddingValues ->
         Box(
             modifier = Modifier
-                .fillMaxSize()
                 .background(Color(0xFF2196F3)) // Set your background color here
                 .padding(paddingValues) // Ensures the padding is applied to the content
         ) {
             // Wrapping the content with a Surface to give it rounded corners
             Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 10.dp),
+                    .fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp), // Rounded top corners
-
                 shadowElevation = 4.dp // Elevation for shadow
             ) {
                 // CONTENT
