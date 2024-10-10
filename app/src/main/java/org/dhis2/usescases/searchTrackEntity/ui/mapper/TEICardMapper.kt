@@ -3,7 +3,6 @@ package org.dhis2.usescases.searchTrackEntity.ui.mapper
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
@@ -12,6 +11,7 @@ import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.outlined.SyncDisabled
 import androidx.compose.material.icons.outlined.SyncProblem
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -35,12 +35,14 @@ import org.hisp.dhis.mobile.ui.designsystem.component.Button
 import org.hisp.dhis.mobile.ui.designsystem.component.ButtonStyle
 import org.hisp.dhis.mobile.ui.designsystem.theme.SurfaceColor
 import org.hisp.dhis.mobile.ui.designsystem.theme.TextColor
+import org.saudigitus.rei.utils.SearchTeiStyle
 import java.io.File
 import java.util.Date
 
 class TEICardMapper(
     val context: Context,
     val resourceManager: ResourceManager,
+    private val searchTeiStyle: SearchTeiStyle,
 ) {
 
     fun map(
@@ -49,14 +51,18 @@ class TEICardMapper(
         onCardClick: () -> Unit,
         onImageClick: (String) -> Unit,
     ): ListCardUiModel {
+        val style = searchTeiStyle.getTeiCardBackground(searchTEIModel)
+
         return ListCardUiModel(
             avatar = { ProvideAvatar(searchTEIModel, onImageClick) },
+            background = style.second,
             title = getTitle(searchTEIModel),
             lastUpdated = searchTEIModel.tei.lastUpdated().toDateSpan(context),
             additionalInfo = getAdditionalInfoList(searchTEIModel),
             actionButton = { ProvideSyncButton(searchTEIModel, onSyncIconClick) },
             expandLabelText = resourceManager.getString(R.string.show_more),
             shrinkLabelText = resourceManager.getString(R.string.show_less),
+            status = style.first,
             onCardCLick = onCardClick,
         )
     }
