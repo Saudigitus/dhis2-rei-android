@@ -285,6 +285,7 @@ dependencies {
     implementation(platform(libs.dispatcher.dispatchBOM))
     implementation(libs.dispatcher.dispatchCore)
     implementation(libs.androidx.navigation.compose)
+    implementation(project(":rei"))
 
     coreLibraryDesugaring(libs.desugar)
 
