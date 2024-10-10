@@ -42,7 +42,7 @@ fun ListCard(imageResId: Int, title: String, subtitle: String, icon: androidx.co
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .size(width = 0.dp, height = 70.dp)
+            .size(width = 0.dp, height = 80.dp)
             .shadow(2.dp, RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(containerColor = Color.White),

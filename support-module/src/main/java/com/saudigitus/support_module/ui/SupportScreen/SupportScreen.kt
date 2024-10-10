@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
+import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.SimpleCard
 import timber.log.Timber
 
@@ -26,47 +27,10 @@ fun SupportScreen(
     navController: NavHostController,
     onBack: () -> Unit = {} // Placeholder for back action
 ) {
-    Scaffold(
-        Modifier.background(Color(0xFF2196F3)),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.support_view_title),
-                        color = Color.White,
-                        fontSize = 20.sp
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF2196F3) // Blue background color
-                )
-            )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFF2196F3)) // Set your background color here
-                .padding(paddingValues) // Ensures the padding is applied to the content
-        ) {
-        // Wrapping the content with a Surface to give it rounded corners
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp), // Rounded top corners
-
-            shadowElevation = 4.dp // Elevation for shadow
-        ) {
+    BasicApp(
+        title = stringResource(id = R.string.support_view_title),
+        onBack = onBack,
+        content = {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -75,18 +39,17 @@ fun SupportScreen(
             ) {
                 Spacer(Modifier.height(20.dp))
                 Text(
-                    text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's",
+                    text = stringResource(id = R.string.support_view_subtitle),
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
                 Spacer(Modifier.height(20.dp))
-                SimpleCard(title = "Relatar erros de sincronização", icon = Icons.Default.Close)
+                SimpleCard(title = stringResource(id = R.string.sync_errord), icon = Icons.Default.Close)
                 Spacer(Modifier.height(20.dp))
-                SimpleCard(title = "Relatar outros erros", icon = Icons.Default.Warning)
+                SimpleCard(title = stringResource(id = R.string.other_errors) , icon = Icons.Default.Warning)
             }
         }
-        }
-    }
+    )
 }
 
 @Preview(showBackground = true)

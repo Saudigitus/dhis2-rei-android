@@ -31,7 +31,6 @@ fun BasicApp(
     fab:  (@Composable () -> Unit)? = null
 ) {
     Scaffold(
-        Modifier.background(Color(0xFF2196F3)),
         topBar = {
             TopAppBar(
                 title = {
@@ -63,17 +62,14 @@ fun BasicApp(
     ) { paddingValues ->
         Box(
             modifier = Modifier
-                .fillMaxSize()
                 .background(Color(0xFF2196F3)) // Set your background color here
                 .padding(paddingValues) // Ensures the padding is applied to the content
         ) {
             // Wrapping the content with a Surface to give it rounded corners
             Surface(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 10.dp),
+                    .fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp), // Rounded top corners
-
                 shadowElevation = 4.dp // Elevation for shadow
             ) {
                 // CONTENT
