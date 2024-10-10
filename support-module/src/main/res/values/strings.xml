@@ -3,4 +3,7 @@
     <string name="manuals">Manuais</string>
     <string name="support">Suporte</string>
     <string name="manual_title">Manuais de Utilizadores</string>
+    <string name="support_menu_label">Suporte ao utilizador</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="support_view_title">Suporte ao utilizador</string>
 </resources>

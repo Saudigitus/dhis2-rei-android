@@ -2,4 +2,6 @@
 <resources>
 
     <style name="Theme.ViewTest" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Dhis2androidcaptureapp" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

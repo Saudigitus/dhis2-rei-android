@@ -1,6 +1,7 @@
 package com.saudigitus.support_module.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,17 +19,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomCard(imageResId: Int, title: String) {
+fun CustomCard(imageResId: Int, title: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .size(150.dp)
             .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
+
 
     ) {
         Column(
@@ -39,12 +43,13 @@ fun CustomCard(imageResId: Int, title: String) {
             Image(
                 painter = painterResource(id = imageResId), // Substitua 'your_image' pelo nome do seu arquivo
                 contentDescription = null,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(60.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             )
         }
     }
