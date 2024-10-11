@@ -96,7 +96,9 @@ navigationCompose = "2.8.2"
 lifecycleRuntimeKtx = "2.8.6"
 composeBom = "2024.04.01"
 room_version = "2.6.1"
+androidxHiltNavigation = "1.0.0"
 [libraries]
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigation" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }

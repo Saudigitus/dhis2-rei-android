@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
@@ -32,6 +33,9 @@ fun ManualScreen(
     navController: NavHostController,
     onBack: () -> Unit
 ) {
+    val viewModel = hiltViewModel<ManualViewModel>()
+
+    viewModel
     BasicApp(
         title = stringResource(id = R.string.manuals),
         onBack = onBack,

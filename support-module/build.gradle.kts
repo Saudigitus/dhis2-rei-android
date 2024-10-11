@@ -53,6 +53,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.lifecycle)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
     implementation(libs.room.runtime)
     implementation(project(":commons"))
