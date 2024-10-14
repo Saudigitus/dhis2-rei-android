@@ -3,10 +3,8 @@ package org.saudigitus.rei.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -99,42 +97,6 @@ fun PreviewHomeStageCard(
     )
 }
 
-@Composable
-fun Test() {
-    Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        HomeStageCard(
-            modifier = Modifier.size(120.dp),
-            state = HomeStageCardState(
-                title = "30",
-                subtitle = stringResource(HardcodeData.getHomeTabItemData()[0].first),
-                bottomColor = HardcodeData.getHomeTabItemData()[0].second,
-            ),
-        )
-
-        HomeStageCard(
-            modifier = Modifier.size(120.dp),
-            state = HomeStageCardState(
-                title = "20",
-                subtitle = stringResource(HardcodeData.getHomeTabItemData()[1].first),
-                bottomColor = HardcodeData.getHomeTabItemData()[1].second,
-            ),
-        )
-
-        HomeStageCard(
-            modifier = Modifier.size(120.dp),
-            state = HomeStageCardState(
-                title = "60",
-                subtitle = stringResource(HardcodeData.getHomeTabItemData()[2].first),
-                bottomColor = HardcodeData.getHomeTabItemData()[2].second,
-            ),
-        )
-    }
-}
 
 @Preview
 @Composable
