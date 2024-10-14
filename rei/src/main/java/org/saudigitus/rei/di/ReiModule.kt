@@ -5,13 +5,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.hisp.dhis.android.core.D2
-import org.saudigitus.rei.utils.SearchTeiStyle
+import org.saudigitus.rei.data.source.DataManager
+import org.saudigitus.rei.data.source.repository.DataManagerImpl
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-open class ReiModule {
+object ReiModule {
+
     @Provides
     @Singleton
-    open fun providesSearchTeiStyle(d2: D2) = SearchTeiStyle(d2)
+    fun providesDataManager(d2: D2): DataManager = DataManagerImpl(d2)
 }

@@ -7,11 +7,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -49,10 +49,12 @@ import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.saudigitus.support_module.ui.MenuScreen
 import org.dhis2.R
 import org.dhis2.commons.bindings.addIf
@@ -85,6 +87,8 @@ import org.hisp.dhis.mobile.ui.designsystem.component.state.rememberListCardStat
 import org.hisp.dhis.mobile.ui.designsystem.theme.Spacing
 import org.hisp.dhis.mobile.ui.designsystem.theme.SurfaceColor
 import org.hisp.dhis.mobile.ui.designsystem.theme.TextColor
+import org.saudigitus.rei.ui.stages.StageScreen
+import org.saudigitus.rei.ui.stages.StageViewModel
 import java.util.Date
 
 enum class ProgramLayout {
@@ -99,6 +103,7 @@ enum class ProgramLayout {
 
 @Composable
 fun ProgramList(
+    stageViewModel: StageViewModel? = null,
     programs: List<ProgramUiModel>?,
     onItemClick: (programUiModel: ProgramUiModel) -> Unit,
     onGranularSyncClick: (programUiModel: ProgramUiModel) -> Unit,
@@ -122,7 +127,7 @@ fun ProgramList(
             ExpandableItemColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(500.dp),
+                    .height(300.dp),
                 itemList = programs,
             ) { program, verticalPadding, onSizeChanged ->
 
@@ -144,6 +149,18 @@ fun ProgramList(
                         ?: run { {} },
                 )
             }
+            if (stageViewModel != null) {
+                StageScreen(stageViewModel)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Suporte ao utilizador",
+                modifier = Modifier.padding(horizontal = 16.dp),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black.copy(.5f),
+            )
             MenuScreen(context = LocalContext.current)
         } ?: run {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
