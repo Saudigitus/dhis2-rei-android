@@ -29,13 +29,14 @@ class StageViewModel(
 
     private fun loadStages() {
         viewModelScope.launch {
-            val stages = dataManager.getStages("program")
+            val program = dataManager.loadConfig()?.stageProgram
+            val stages = dataManager.getStages(program ?: "")
 
             viewModelState.update {
                 it.copy(
                     stages = stages,
                     stagesData = dataManager.getStageEventData(
-                        "program",
+                        program ?: "",
                         stages.firstOrNull()?.uid ?: "",
                     ),
                 )
@@ -45,8 +46,10 @@ class StageViewModel(
 
     fun loadStageData(stage: String) {
         viewModelScope.launch {
+            val program = dataManager.loadConfig()?.stageProgram
+
             viewModelState.update {
-                it.copy(stagesData = dataManager.getStageEventData("program", stage))
+                it.copy(stagesData = dataManager.getStageEventData("$program", stage))
             }
         }
     }

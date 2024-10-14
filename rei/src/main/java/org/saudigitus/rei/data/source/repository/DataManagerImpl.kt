@@ -6,9 +6,12 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import org.hisp.dhis.android.core.D2
 import org.hisp.dhis.android.core.event.EventStatus
+import org.saudigitus.rei.data.model.AppConfig
 import org.saudigitus.rei.data.model.Stage
 import org.saudigitus.rei.data.source.DataManager
+import org.saudigitus.rei.utils.Constants
 import org.saudigitus.rei.utils.HardcodeData
+import org.saudigitus.rei.utils.Utils.fromJson
 import org.saudigitus.rei.utils.countEventsByStatusToday
 import javax.inject.Inject
 
@@ -16,6 +19,16 @@ class DataManagerImpl
 @Inject constructor(
     private val d2: D2,
 ) : DataManager {
+    override suspend fun loadConfig() = withContext(Dispatchers.IO) {
+        val dataStore = d2.dataStoreModule()
+            .dataStore()
+            .byNamespace().eq(Constants.NAMESPACE)
+            .byKey().eq(Constants.KEY)
+            .one().blockingGet()
+
+        return@withContext fromJson<AppConfig>(dataStore?.value())
+    }
+
     override suspend fun getStages(program: String) = withContext(Dispatchers.IO) {
         return@withContext d2.programModule().programStages()
             .byProgramUid().eq(program)
