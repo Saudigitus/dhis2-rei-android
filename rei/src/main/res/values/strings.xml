@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="effective">Efectivados</string>
+    <string name="pending">Pendentes</string>
+    <string name="late">Atrasados</string>
+</resources>

@@ -14,6 +14,9 @@ import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.dhislogic.DhisProgramUtils
 import org.dhis2.data.service.SyncStatusController
 import org.hisp.dhis.android.core.D2
+import org.saudigitus.rei.data.source.DataManager
+import org.saudigitus.rei.data.source.repository.DataManagerImpl
+import org.saudigitus.rei.ui.stages.StageViewModelFactory
 
 @Module
 class ProgramModule(private val view: ProgramView) {
@@ -35,6 +38,12 @@ class ProgramModule(private val view: ProgramView) {
             matomoAnalyticsController,
             syncStatusController,
         )
+    }
+
+    @Provides
+    @PerFragment
+    internal fun stageViewModelFactory(dataManager: DataManager): StageViewModelFactory {
+        return StageViewModelFactory(dataManager)
     }
 
     @Provides
@@ -61,5 +70,11 @@ class ProgramModule(private val view: ProgramView) {
     @PerFragment
     fun provideAnimations(): ProgramAnimation {
         return ProgramAnimation()
+    }
+
+    @Provides
+    @PerFragment
+    fun provideDataManager(d2: D2): DataManager {
+        return DataManagerImpl(d2)
     }
 }
