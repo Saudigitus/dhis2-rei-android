@@ -7,7 +7,7 @@ object Utils {
         translateJsonToObject()
             .readValue(
                 json,
-                T::class.java
+                T::class.java,
             )
     } else {
         null

@@ -1,6 +1,5 @@
 package org.saudigitus.rei.data.model
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -9,5 +8,5 @@ data class Program(
     @JsonProperty("uid")
     val uid: String,
     @JsonProperty("displayName")
-    val displayName: String
+    val displayName: String,
 )
