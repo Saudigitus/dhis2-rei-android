@@ -47,6 +47,8 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(project(":commons"))
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.compose.lifecycle)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     kapt(libs.dagger.compiler)
     kapt(libs.dagger.hilt.android.compiler)
