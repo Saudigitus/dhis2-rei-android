@@ -53,10 +53,16 @@ android {
 }
 
 dependencies {
+    // HILT
     implementation(libs.androidx.compose.lifecycle)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.dagger.hilt.android)
+
+    // ROOM
     implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.room.ktx)
+
     implementation(project(":commons"))
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)

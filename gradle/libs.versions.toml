@@ -101,6 +101,7 @@ androidxHiltNavigation = "1.0.0"
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigation" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
 gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 kotlinPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinSerialization = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }

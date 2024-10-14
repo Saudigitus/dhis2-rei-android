@@ -21,16 +21,18 @@ class ManualsRepositoryImp(
     private val d2: D2
 ): ManualsRepository {
     override fun getManualsDataStore(): Flow<List<ManualItem>> {
-        val dataStore = Manual.fromJson(
-            d2.dataStoreModule().dataStore().byKey()
-                .eq(Constants.MEDIA_DATA_STORE_KEY).blockingGet()
-                .getOrNull(
-                    0
-                )?.value()
-        )
-        return flowOf(dataStore!!)
-    }
+        val dataStoreValue = d2.dataStoreModule().dataStore().byKey()
+            .eq(Constants.MEDIA_DATA_STORE_KEY).blockingGet()
+            .getOrNull(0)?.value()
 
+        val dataStore = dataStoreValue?.let { Manual.fromJson(it) }
+
+        return if (dataStore != null) {
+            flowOf(dataStore)
+        } else {
+            flowOf(emptyList()) // Return an empty list if dataStore is null
+        }
+    }
 
     override suspend fun downloadManualToLocal(context: Context, url: String, fileName: String) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -50,6 +52,7 @@ class ManualsRepositoryImp(
 
     override suspend fun getManualDetails(uid: String): ManualItem? {
         TODO("Not yet implemented")
+
     }
 
     override suspend fun storeLocalManualDetails(manual: ManualItem) = withContext(
