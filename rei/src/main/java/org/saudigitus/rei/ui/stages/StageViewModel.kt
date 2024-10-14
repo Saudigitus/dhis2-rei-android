@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,19 +24,27 @@ class StageViewModel(
             viewModelState.value,
         )
 
+    private val program = flow {
+        emit(dataManager.loadConfig()?.stageProgram)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        null
+    )
+
     init {
         loadStages()
     }
 
     private fun loadStages() {
         viewModelScope.launch {
-            val stages = dataManager.getStages("program")
+            val stages = dataManager.getStages("${program.value}")
 
             viewModelState.update {
                 it.copy(
                     stages = stages,
                     stagesData = dataManager.getStageEventData(
-                        "program",
+                        "${program.value}",
                         stages.firstOrNull()?.uid ?: "",
                     ),
                 )
@@ -46,7 +55,7 @@ class StageViewModel(
     fun loadStageData(stage: String) {
         viewModelScope.launch {
             viewModelState.update {
-                it.copy(stagesData = dataManager.getStageEventData("program", stage))
+                it.copy(stagesData = dataManager.getStageEventData("${program.value}", stage))
             }
         }
     }

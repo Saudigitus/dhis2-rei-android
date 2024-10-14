@@ -45,60 +45,62 @@ fun StageTab(
 ) {
     var tabState by remember { mutableIntStateOf(0) }
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .then(modifier),
-        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
-        horizontalAlignment = Alignment.Start,
-    ) {
-        ScrollableTabRow(
-            selectedTabIndex = tabState,
-            backgroundColor = Color.White,
-            edgePadding = 0.dp,
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .tabIndicatorOffset(tabPositions[tabState])
-                        .background(Color.Transparent, shape = RoundedCornerShape(4.dp)),
-                    color = SurfaceColor.Primary,
-                )
-            },
+    if (state.stages.isNotEmpty()) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .then(modifier),
+            verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Top),
+            horizontalAlignment = Alignment.Start,
         ) {
-            state.stages.forEachIndexed { index, stage ->
-                Tab(
-                    selected = tabState == index,
-                    onClick = {
-                        tabState = index
-                        onAction(stage.uid)
-                    },
-                    text = {
-                        Text(
-                            text = stage.displayName ?: "",
-                            maxLines = 1,
-                            softWrap = true,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                )
+            ScrollableTabRow(
+                selectedTabIndex = tabState,
+                backgroundColor = Color.White,
+                edgePadding = 0.dp,
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .tabIndicatorOffset(tabPositions[tabState])
+                            .background(Color.Transparent, shape = RoundedCornerShape(4.dp)),
+                        color = SurfaceColor.Primary,
+                    )
+                },
+            ) {
+                state.stages.forEachIndexed { index, stage ->
+                    Tab(
+                        selected = tabState == index,
+                        onClick = {
+                            tabState = index
+                            onAction(stage.uid)
+                        },
+                        text = {
+                            Text(
+                                text = stage.displayName ?: "",
+                                maxLines = 1,
+                                softWrap = true,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        },
+                    )
+                }
             }
-        }
 
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-        ) {
-            items(state.stagesData) {
-                HomeStageCard(
-                    modifier = Modifier.size(120.dp),
-                    state = HomeStageCardState(
-                        title = it.first.ifEmpty { "0" },
-                        subtitle = stringResource(it.second),
-                        bottomColor = it.third,
-                    ),
-                )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                contentPadding = PaddingValues(horizontal = 16.dp),
+            ) {
+                items(state.stagesData) {
+                    HomeStageCard(
+                        modifier = Modifier.size(120.dp),
+                        state = HomeStageCardState(
+                            title = it.first.ifEmpty { "0" },
+                            subtitle = stringResource(it.second),
+                            bottomColor = it.third,
+                        ),
+                    )
+                }
             }
         }
     }
