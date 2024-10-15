@@ -13,6 +13,7 @@ import org.saudigitus.rei.utils.Constants
 import org.saudigitus.rei.utils.HardcodeData
 import org.saudigitus.rei.utils.Utils.fromJson
 import org.saudigitus.rei.utils.countEventsByStatusToday
+import org.saudigitus.rei.utils.overdueEventCount
 import javax.inject.Inject
 
 class DataManagerImpl
@@ -48,7 +49,7 @@ class DataManagerImpl
         val (scheduledCount, completedCount, overdueCount) = awaitAll(
             async { d2.countEventsByStatusToday(program, stage, EventStatus.SCHEDULE) },
             async { d2.countEventsByStatusToday(program, stage, EventStatus.COMPLETED) },
-            async { d2.countEventsByStatusToday(program, stage, EventStatus.OVERDUE) },
+            async { d2.overdueEventCount(program, stage) },
         )
 
         val stageStatus = HardcodeData.getHomeTabItemData()
