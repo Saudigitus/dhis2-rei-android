@@ -1,6 +1,5 @@
 package org.dhis2.usescases.main.program
 
-import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.parallel.ParallelFlowable
 import org.dhis2.commons.bindings.isStockProgram
@@ -96,7 +95,6 @@ internal class ProgramRepositoryImpl(
                     .sequential()
             }
             .map { program ->
-                Log.e("program", program.uid())
                 val recordLabel =
                     dhisProgramUtils.getProgramRecordLabel(
                         program,
