@@ -2,6 +2,7 @@ package org.dhis2.data.dhislogic
 
 import io.reactivex.Flowable
 import org.hisp.dhis.android.core.D2
+import org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope
 import org.hisp.dhis.android.core.common.State
 import org.hisp.dhis.android.core.enrollment.EnrollmentCollectionRepository
 import org.hisp.dhis.android.core.event.EventCollectionRepository
@@ -9,6 +10,7 @@ import org.hisp.dhis.android.core.organisationunit.OrganisationUnit
 import org.hisp.dhis.android.core.program.Program
 import org.hisp.dhis.android.core.program.ProgramType
 import org.hisp.dhis.android.core.trackedentity.TrackedEntityInstanceCollectionRepository
+import org.saudigitus.rei.utils.Utils.datastorePrograms
 import javax.inject.Inject
 
 class DhisProgramUtils @Inject constructor(val d2: D2) {
@@ -43,6 +45,7 @@ class DhisProgramUtils @Inject constructor(val d2: D2) {
 
     fun getProgramsInCaptureOrgUnits(): Flowable<List<Program>> {
         return d2.programModule().programs()
+            .byUid().`in`(datastorePrograms(d2))
             .withTrackedEntityType()
             .byOrganisationUnitScope(OrganisationUnit.Scope.SCOPE_DATA_CAPTURE)
             .get().toFlowable()
