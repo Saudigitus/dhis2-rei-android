@@ -55,6 +55,7 @@ import org.dhis2.utils.granularsync.SyncStatusDialogNavigatorKt;
 import org.hisp.dhis.android.core.arch.call.D2Progress;
 import org.hisp.dhis.android.core.common.ValueType;
 import org.hisp.dhis.android.core.organisationunit.OrganisationUnit;
+import org.saudigitus.rei.navigator.LineListingComponentProvider;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ import kotlin.Pair;
 import kotlin.Unit;
 import timber.log.Timber;
 
-public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTEContractsModule.View {
+public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTEContractsModule.View, LineListingComponentProvider {
 
     ActivitySearchBinding binding;
     SearchScreenConfigurator searchScreenConfigurator;
@@ -114,6 +115,14 @@ public class SearchTEActivity extends ActivityGlobalAbstract implements SearchTE
     private boolean initSearchNeeded = true;
     public SearchTEComponent searchComponent;
     private int initialPage = 0;
+
+    @NonNull
+    @Override
+    public Intent launch(@NonNull Context context, @NonNull Bundle bundle) {
+        Intent intent = new Intent(context, SearchTEActivity.class);
+        intent.putExtras(bundle);
+        return intent;
+    }
 
     public enum Extra {
         TEI_UID("TRACKED_ENTITY_UID"),
