@@ -2,8 +2,11 @@ package com.saudigitus.support_module.data.local.repository
 
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.saudigitus.support_module.data.local.ManualsRepository
 import com.saudigitus.support_module.data.local.database.ManualsDao
 import com.saudigitus.support_module.data.models.manuals.Manual
@@ -15,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import org.hisp.dhis.android.core.D2
 import timber.log.Timber
+import java.io.File
 
 class ManualsRepositoryImp(
     private val  manualsDAO: ManualsDao,
@@ -34,20 +38,21 @@ class ManualsRepositoryImp(
         }
     }
 
-    override suspend fun downloadManualToLocal(context: Context, url: String, fileName: String) {
+    override suspend fun downloadManualToLocal(context: Context, url: String, fileName: String): Unit = withContext(Dispatchers.IO) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
-
-        val request = DownloadManager.Request(uri).apply {
-            setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-            setTitle("Downloading PDF")
-            setDescription("Downloading $fileName")
-            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-            // Store the file in the app's private external files directory
-            setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOCUMENTS, fileName)
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),
+            "$fileName.pdf"
+        )
+        if (!file.exists()) {
+            val request = DownloadManager.Request(uri).apply {
+                setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                // Store the file in the app's private external files directory
+                setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOCUMENTS, "$fileName.pdf")
+            }
+            downloadManager.enqueue(request)
         }
-        downloadManager.enqueue(request)
+        return@withContext
     }
 
     override suspend fun getManualDetails(uid: String): ManualItem? {
@@ -67,5 +72,14 @@ class ManualsRepositoryImp(
 
     override suspend fun getLocalManualDetails(uid: String): ManualItem? = withContext(Dispatchers.IO) {
         return@withContext manualsDAO.getDetailsById(uid)
+    }
+
+    override suspend fun openManual(context: Context, url: String, fileName: String): File? = withContext(Dispatchers.IO)  {
+        // Get the file from the app's private storage
+        val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "$fileName.pdf")
+        if (file.exists()) {
+            return@withContext file
+        }
+        return@withContext null
     }
 }

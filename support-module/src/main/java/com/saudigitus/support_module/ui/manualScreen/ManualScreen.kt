@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.rizzi.bouquet.ResourceType
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ListCard
 import com.saudigitus.support_module.ui.MenuScreen
+import com.saudigitus.support_module.ui.Screen
 import timber.log.Timber
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun ManualScreen(
@@ -40,7 +46,7 @@ fun ManualScreen(
     val viewModel = hiltViewModel<ManualViewModel>()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
 
     BasicApp(
         title = stringResource(id = R.string.manuals),
@@ -60,31 +66,44 @@ fun ManualScreen(
                 color = Color.Gray
             )
             Spacer(Modifier.height(20.dp))
-
-            LazyColumn {
+            if(uiState.isDownloading){
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 items(uiState.manualItems) { manual ->
                     ListCard(
                         imageResId = R.drawable.manual_icon, title = manual.title ?: "title",
                         subtitle = manual.subtitle ?: "subtitle",
                         icon = Icons.Default.ArrowDownward,
+                        onClick = {
+                            val file = viewModel.open(context = context,fileName = manual.uid)
+                            if(file.isFile){
+                                Timber.d("_CLICK_IS IN GO TO PAGE")
+                                val encodedPath = URLEncoder.encode(
+                                    file.absolutePath,
+                                    StandardCharsets.UTF_8.toString()
+                                )
+                                navController.navigate(
+                                    Screen.ViewPdf.route.replace(
+                                        "{path}",
+                                        encodedPath
+                                    )
+                                )
+                            } else {
+                                Timber.d("_CLICK_IS NO FILE")
+
+                            }
+
+
+                        },
+                        state = uiState
                     )
                 }
             }
-            Spacer(Modifier.height(10.dp))
-            ListCard(
-                imageResId = R.drawable.manual_icon, title = "Manual title here",
-                subtitle = "Manual subtitle here alfa",
-                icon = Icons.Default.ArrowDownward,
-            )
-            Spacer(Modifier.height(10.dp))
-            ListCard(
-                imageResId = R.drawable.manual_icon, title = "Manual title here",
-                subtitle = "Manual subtitle here alfa",
-                icon = Icons.Default.ArrowDownward,
-            )
         }
-
-
     })
 }
 

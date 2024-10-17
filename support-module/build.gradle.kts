@@ -63,6 +63,9 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    // PDF VIEWER
+    implementation(libs.io.github.grizzi91)
+
     implementation(project(":commons"))
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)

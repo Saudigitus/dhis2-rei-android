@@ -4,6 +4,7 @@ sealed class Screen(val route: String) {
     object Menu : Screen("menu")
     object Manuals : Screen("manuals")
     object Support : Screen("support")
+    object ViewPdf : Screen("pdf_view/{path}")
 }
 
 

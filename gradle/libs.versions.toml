@@ -97,7 +97,10 @@ lifecycleRuntimeKtx = "2.8.6"
 composeBom = "2024.04.01"
 androidxHiltNavigation = "1.2.0"
 room_version = "2.6.1"
+bouquet-version = "1.1.2"
 [libraries]
+
+io-github-grizzi91 = { group = "io.github.grizzi91", name = "bouquet", version.ref = "bouquet-version" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigation" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }

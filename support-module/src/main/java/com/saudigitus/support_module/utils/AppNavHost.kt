@@ -7,7 +7,11 @@ import androidx.navigation.compose.composable
 import com.saudigitus.support_module.ui.MenuScreen
 import com.saudigitus.support_module.ui.Screen
 import com.saudigitus.support_module.ui.manualScreen.ManualScreen
+import com.saudigitus.support_module.ui.manualScreen.PdfViewer
 import timber.log.Timber
+import java.io.File
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun AppNavHost(navController: NavHostController, route: String, activity: Activity) {
@@ -26,6 +30,14 @@ fun AppNavHost(navController: NavHostController, route: String, activity: Activi
         composable(Screen.Support.route) {
             SupportScreen(navController = navController, onBack = {
                 activity.finish()
+            })
+        }
+        composable(Screen.ViewPdf.route) { backStackEntry ->
+            val encodedPath = backStackEntry.arguments?.getString("path")
+            val filePath = encodedPath?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+            val file = if (filePath != null) File(filePath) else null
+            PdfViewer(navController = navController, file = file, onBack = {
+                navController.popBackStack()
             })
         }
     }
