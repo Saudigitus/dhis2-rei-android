@@ -102,6 +102,7 @@ class SearchTeiLiveAdapter(
                         var cardHeightDp by remember { mutableStateOf(0.dp) }
 
                         val card = cardMapper.map(
+
                             searchTEIModel = it,
                             onSyncIconClick = {
                                 onSyncIconClick.invoke(it.selectedEnrollment.uid())

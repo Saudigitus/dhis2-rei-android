@@ -255,7 +255,7 @@ dependencies {
     implementation(project(":stock-usecase"))
     implementation(project(":dhis2-mobile-program-rules"))
     implementation(project(":tracker"))
-    implementation(project(":support-module"))
+
 
     implementation(libs.security.conscrypt)
     implementation(libs.security.rootbeer)

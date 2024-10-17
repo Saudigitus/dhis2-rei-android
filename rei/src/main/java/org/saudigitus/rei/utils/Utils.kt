@@ -1,7 +1,7 @@
 package org.saudigitus.rei.utils
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.hisp.dhis.android.core.D2
-import org.saudigitus.rei.data.model.AppConfig
 import org.saudigitus.rei.utils.ObjectMapper.translateJsonToObject
 
 object Utils {
@@ -15,17 +15,27 @@ object Utils {
         null
     }
 
+    inline fun <reified T> buildListFromJson(json: String?): List<T>? = if (json != null) {
+        val mapper = ObjectMapper()
+
+        translateJsonToObject()
+            .readValue(
+                json,
+                mapper.typeFactory.constructCollectionType(
+                    List::class.java,
+                    T::class.java,
+                ),
+            )
+    } else {
+        null
+    }
+
     fun <T> T.toJson(): String = translateJsonToObject().writeValueAsString(this)
 
-    fun datastorePrograms(d2: D2): List<String> {
-        val dataStore = d2.dataStoreModule()
-            .dataStore()
-            .byNamespace().eq(Constants.NAMESPACE)
-            .byKey().eq(Constants.KEY)
-            .one().blockingGet()
+    fun isRei(d2: D2, program: String): Boolean {
+        val config = d2.reiModuleDatastore()
+            .find { it.program == program }
 
-        val appConfig = fromJson<AppConfig>(dataStore?.value())
-
-        return appConfig?.programs?.map { it.uid } ?: emptyList()
+        return config != null && (config.defaults.displayStages || config.defaults.displaySupport)
     }
 }
