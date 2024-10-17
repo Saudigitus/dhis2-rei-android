@@ -97,7 +97,6 @@ fun PreviewHomeStageCard(
     )
 }
 
-
 @Preview
 @Composable
 fun PreviewHomeStageCardPending(

@@ -25,3 +25,13 @@ fun D2.countEventsByStatusToday(
     .byEventDate().eq(DateUtils.getInstance().today)
     .byStatus().eq(eventStatus)
     .blockingCount()
+
+
+fun D2.overdueEventCount(
+    program: String,
+    stage: String,
+): Int = eventModule().events()
+    .byProgramUid().eq(program)
+    .byProgramStageUid().eq(stage)
+    .byDueDate().before(DateUtils.getInstance().today)
+    .blockingCount()
