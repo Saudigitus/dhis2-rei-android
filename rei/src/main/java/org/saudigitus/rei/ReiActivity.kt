@@ -4,24 +4,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
-import com.saudigitus.support_module.ui.MenuScreen
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import org.dhis2.commons.Constants
+import org.dhis2.commons.sync.SyncContext
+import org.dhis2.commons.sync.SyncDialog
 import org.dhis2.ui.theme.Dhis2Theme
-import org.saudigitus.rei.ui.stages.StageScreen
+import org.saudigitus.rei.navigator.ReiNavigator
+import org.saudigitus.rei.ui.HomeScreen
 import org.saudigitus.rei.ui.stages.StageViewModel
 
 @AndroidEntryPoint
@@ -35,28 +28,41 @@ class ReiActivity : FragmentActivity() {
 
         setContent {
             Dhis2Theme {
-                viewModel.setProgram(intent?.extras?.getString(Constants.PROGRAM_UID) ?: "")
+                viewModel.setBundle(intent?.extras)
 
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                    HomeScreen(
+                        context = this@ReiActivity,
+                        onSync = ::syncProgram,
+                        onNext = ::launchLineListing
                     ) {
-                        StageScreen(viewModel)
-
-                        Text(
-                            text = "Suporte ao utilizador",
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black.copy(.5f),
-                        )
-
-                        MenuScreen(context = this@ReiActivity)
+                        finish()
                     }
                 }
             }
         }
+    }
+
+    private fun syncProgram() {
+        SyncDialog(
+            activity = this@ReiActivity,
+            recordUid = viewModel.program.value,
+            syncContext = SyncContext.TrackerProgram(viewModel.program.value),
+            onNoConnectionListener = {
+                Snackbar.make(
+                    this.window.decorView.rootView,
+                    getString(R.string.sync_offline_check_connection),
+                    Snackbar.LENGTH_SHORT,
+                ).show()
+            },
+        ).show()
+    }
+
+
+    private fun launchLineListing() {
+        ReiNavigator(
+            activity = this@ReiActivity,
+            intent?.extras!!,
+        ).navigateToLineListing()
     }
 }
