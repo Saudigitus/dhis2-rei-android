@@ -10,6 +10,10 @@ data class AppConfig(
     val stageProgram: String,
     @JsonProperty("programs")
     val programs: List<Program>,
+    @JsonProperty("stageVaccination")
+    val stageVaccination: String,
+    @JsonProperty("ccvDataElement")
+    val ccvDataElement: String,
 ) {
     override fun toString() = this.toJson()
 }

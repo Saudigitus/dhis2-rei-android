@@ -2,7 +2,10 @@ package org.saudigitus.rei.utils
 
 import org.dhis2.commons.date.DateUtils
 import org.hisp.dhis.android.core.D2
+import org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope
 import org.hisp.dhis.android.core.event.EventStatus
+import org.saudigitus.rei.data.model.AppConfig
+import org.saudigitus.rei.utils.Utils.fromJson
 import java.util.Locale
 
 fun String.capital() = this.replaceFirstChar {
@@ -35,3 +38,26 @@ fun D2.overdueEventCount(
     .byProgramStageUid().eq(stage)
     .byDueDate().before(DateUtils.getInstance().today)
     .blockingCount()
+
+fun D2.eventOrderedByDateDesc(enrollment: String) = eventModule().events()
+    .byEnrollmentUid().eq(enrollment)
+    .orderByEventDate(RepositoryScope.OrderByDirection.DESC)
+    .one().blockingGet()
+
+
+fun D2.reiModuleDatastore(): AppConfig? {
+    val datastore = dataStoreModule().dataStore()
+        .byNamespace().eq(Constants.NAMESPACE)
+        .byKey().eq(Constants.KEY)
+        .one().blockingGet()
+    return fromJson<AppConfig>(datastore?.value())
+}
+
+fun D2.isEventOverdue(
+    enrollment: String,
+    stage: String
+) = eventModule().events()
+    .byEnrollmentUid().eq(enrollment)
+    .byProgramStageUid().eq(stage)
+    .byDueDate().before(DateUtils.getInstance().today)
+    .blockingCount() > 0
