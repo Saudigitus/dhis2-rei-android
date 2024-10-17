@@ -44,7 +44,6 @@ fun ManualScreen(
     onBack: () -> Unit
 ) {
     val viewModel = hiltViewModel<ManualViewModel>()
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -55,7 +54,7 @@ fun ManualScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFFFFFFF))
+                .background(color = Color.White)
                 .padding(16.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
@@ -75,13 +74,12 @@ fun ManualScreen(
             ) {
                 items(uiState.manualItems) { manual ->
                     ListCard(
-                        imageResId = R.drawable.manual_icon, title = manual.title ?: "title",
-                        subtitle = manual.subtitle ?: "subtitle",
+                        imageResId = R.drawable.manual_icon, title = manual.title,
+                        subtitle = manual.subtitle.toString(),
                         icon = Icons.Default.ArrowDownward,
                         onClick = {
                             val file = viewModel.open(context = context,fileName = manual.uid)
                             if(file.isFile){
-                                Timber.d("_CLICK_IS IN GO TO PAGE")
                                 val encodedPath = URLEncoder.encode(
                                     file.absolutePath,
                                     StandardCharsets.UTF_8.toString()
@@ -92,12 +90,7 @@ fun ManualScreen(
                                         encodedPath
                                     )
                                 )
-                            } else {
-                                Timber.d("_CLICK_IS NO FILE")
-
                             }
-
-
                         },
                         state = uiState
                     )

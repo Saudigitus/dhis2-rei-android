@@ -8,10 +8,6 @@ import java.io.File
 
 interface ManualsRepository {
     fun getManualsDataStore(): Flow<List<ManualItem>>
-    suspend fun getManualDetails(uid: String): ManualItem?
-    suspend fun storeLocalManualDetails(manual: ManualItem)
-    suspend fun getAllLocalManualDetails(): List<ManualItem?>
-    suspend fun getLocalManualDetails(uid: String): ManualItem?
     suspend fun openManual(context: Context, url: String, fileName: String): File?
     suspend fun downloadManualToLocal(
         context: Context,
