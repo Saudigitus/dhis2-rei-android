@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,8 @@ import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ErrorComponent
+import com.saudigitus.support_module.ui.theme.Blue700
+import com.saudigitus.support_module.ui.theme.app_blue_color
 
 @Composable
 fun GeneralReportScreen(
@@ -44,15 +47,15 @@ fun GeneralReportScreen(
     onBack: () -> Unit
 ) {
     BasicApp(
-        title = "Relatar erro de sincronização",
+        title = stringResource(id = R.string.general_errors_view_title) ,
         onBack = onBack,
         fab = {
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send") }, // Icon on the FAB
-                text = { Text("Enviar") }, // Text on the FAB
+                text = { Text(stringResource(id = R.string.fab_send_lb)) }, // Text on the FAB
                 onClick = { /* Action when clicked */ },
-                containerColor = Color.White, // Background color of the FAB
-                contentColor = Color(0xFF2C98F0) // Color of the text and icon
+                containerColor = app_blue_color,
+                contentColor = Color.White
             )
         },
         content = {
@@ -60,7 +63,7 @@ fun GeneralReportScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFFFFFFF))
+                .background(color = Color.White)
                 .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.Start
@@ -69,15 +72,15 @@ fun GeneralReportScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.support), // Substitua 'your_image' pelo nome do seu arquivo
+                painter = painterResource(id = R.drawable.support),
                 contentDescription = null,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(50.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the",
-                fontSize = 16.sp,
-                color = Color.Gray
+                text = stringResource(id = R.string.general_errors_view_lb),
+                fontSize = 12.sp,
+                color = Blue700
             )
             Spacer(Modifier.height(10.dp))
         }
@@ -88,8 +91,8 @@ fun GeneralReportScreen(
                 onValueChange = { textState.value = it },
                 label = { Text(text = "Message") },
                 modifier = Modifier.fillMaxWidth(),
-                minLines = 12,
-                maxLines = 12, // Allows up to 5 lines
+                minLines = 20,
+                maxLines = 20, // Allows up to 5 lines
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Default // Allows multiline input
                 )

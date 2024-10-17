@@ -26,6 +26,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saudigitus.support_module.ui.theme.Blue700
+import org.hisp.dhis.mobile.ui.designsystem.theme.Radius
+import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
 
 @Composable
 fun SimpleCard(
@@ -36,9 +39,10 @@ fun SimpleCard(
         modifier = Modifier
             .fillMaxWidth()
             .size(width = 0.dp, height = 70.dp)
-            .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .dropShadow(shape = RoundedCornerShape(Radius.XS))
+            .clip(RoundedCornerShape(10.dp))
             .clickable(onClick = onClick),
+        shape = RoundedCornerShape(Radius.XS),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
     ){
@@ -58,7 +62,7 @@ fun SimpleCard(
                     text = title,
                     fontSize = 14.sp,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black
+                    color = Blue700
                 )
             }
             Icon(

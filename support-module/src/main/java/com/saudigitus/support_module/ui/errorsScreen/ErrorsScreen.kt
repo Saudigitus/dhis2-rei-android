@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -44,6 +45,7 @@ import com.saudigitus.support_module.ui.components.ErrorComponent
 import com.saudigitus.support_module.ui.components.ListCard
 import com.saudigitus.support_module.ui.MenuScreen
 import com.saudigitus.support_module.ui.SupportScreen.ErrorsViewModel
+import com.saudigitus.support_module.ui.theme.app_blue_color
 
 @Composable
 fun ErrorsScreen(
@@ -57,6 +59,15 @@ fun ErrorsScreen(
     BasicApp(
         title = stringResource(id = R.string.sync_errors_view_title) ,
         onBack = onBack,
+        fab = {
+            ExtendedFloatingActionButton(
+                icon = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send") }, // Icon on the FAB
+                text = { Text(stringResource(id = R.string.fab_send_lb)) }, // Text on the FAB
+                onClick = { /* Action when clicked */ },
+                containerColor = app_blue_color, // Background color of the FAB
+                contentColor = Color.White // Color of the text and icon
+            )
+        },
         content = {
         Column(
             modifier = Modifier
@@ -75,13 +86,15 @@ fun ErrorsScreen(
                 Spacer(Modifier.height(10.dp))
 
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxWidth()
+                        .height(400.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(errorsUiState.errorsItems) { error ->
                         ErrorComponent(
                             error = error.errorDescription.toString(),
                             type = error.errorCode.toString(),
+                            comp = error.errorComponent ?: "",
                             date = error.creationDate.toString())
                     }
                 }

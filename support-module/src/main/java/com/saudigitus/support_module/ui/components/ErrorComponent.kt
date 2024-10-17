@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ErrorComponent(error: String, type: String, date: String) {
+fun ErrorComponent(error: String, type: String, comp: String, date: String) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
@@ -49,7 +49,7 @@ fun ErrorComponent(error: String, type: String, date: String) {
                     color = Color.Gray
                 )
                 Text(
-                    text = type,
+                    text = type +" "+ comp,
                     fontSize = 10.sp,
                     color = Color.Red
                 )
@@ -67,5 +67,5 @@ fun ErrorComponent(error: String, type: String, date: String) {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPreview() {
-    ErrorComponent("Error It is a long established fact reader", "FK","2012-15-54")
+    ErrorComponent("Error It is a long established fact reader", "FK", "server","2012-15-54")
 }
