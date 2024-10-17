@@ -3,8 +3,10 @@ package com.saudigitus.support_module.di
 import android.app.Application
 import androidx.room.Room
 import com.saudigitus.support_module.data.local.ManualsRepository
+import com.saudigitus.support_module.data.local.SyncErrorsRepository
 import com.saudigitus.support_module.data.local.database.AppDatabase
 import com.saudigitus.support_module.data.local.repository.ManualsRepositoryImp
+import com.saudigitus.support_module.data.local.repository.SyncErrorsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,10 +30,17 @@ object AppModule {
     /**
      * Inject ManualsRepository
      */
-
     @Provides
     @Singleton fun providesManualRepository(appDatabase: AppDatabase, d2: D2): ManualsRepository {
         return ManualsRepositoryImp(appDatabase.manualsDAO(), d2 = d2)
+    }
+
+    /**
+     * Inject ManualsRepository
+     */
+    @Provides
+    @Singleton fun providesSyncErrorsRepository(appDatabase: AppDatabase, d2: D2): SyncErrorsRepository {
+        return SyncErrorsRepositoryImpl(d2 = d2)
     }
 
 }
