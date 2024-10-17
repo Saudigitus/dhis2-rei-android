@@ -1,5 +1,6 @@
 package com.saudigitus.support_module.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,13 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+fun SimpleCard(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .size(width = 0.dp, height = 70.dp)
             .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
     ){
@@ -69,5 +74,5 @@ fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVec
 @Preview(showBackground = true)
 @Composable
 fun SimpleCardPreview() {
-    SimpleCard(title = "Manual subtitle here alfa", icon = Icons.AutoMirrored.Filled.KeyboardArrowRight)
+    SimpleCard(title = "Manual subtitle here alfa", icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, onClick = {})
 }

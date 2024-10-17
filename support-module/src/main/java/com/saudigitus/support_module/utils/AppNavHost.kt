@@ -4,8 +4,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.viewtest.ui.manualScreen.ErrorsScreen
 import com.saudigitus.support_module.ui.MenuScreen
 import com.saudigitus.support_module.ui.Screen
+import com.saudigitus.support_module.ui.manualScreen.GeneralReportScreen
 import com.saudigitus.support_module.ui.manualScreen.ManualScreen
 import com.saudigitus.support_module.ui.manualScreen.PdfViewer
 import timber.log.Timber
@@ -30,6 +32,16 @@ fun AppNavHost(navController: NavHostController, route: String, activity: Activi
         composable(Screen.Support.route) {
             SupportScreen(navController = navController, onBack = {
                 activity.finish()
+            })
+        }
+        composable(Screen.SyncErrors.route) {
+            ErrorsScreen(navController = navController, onBack = {
+                navController.popBackStack()
+            })
+        }
+        composable(Screen.GeneralErrors.route) {
+            GeneralReportScreen(navController = navController, onBack = {
+                navController.popBackStack()
             })
         }
         composable(Screen.ViewPdf.route) { backStackEntry ->

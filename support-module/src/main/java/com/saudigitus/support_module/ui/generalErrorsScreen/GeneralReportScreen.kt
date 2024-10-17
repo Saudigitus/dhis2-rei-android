@@ -27,21 +27,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ErrorComponent
 
 @Composable
 fun GeneralReportScreen(
-    //viewModel: MenuViewModel,
-    //onBack: () -> Unit
+    navController: NavHostController,
+    onBack: () -> Unit
 ) {
-    BasicApp(title = "Relatar erro de sincronização",
+    BasicApp(
+        title = "Relatar erro de sincronização",
+        onBack = onBack,
         fab = {
             ExtendedFloatingActionButton(
                 icon = { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Send") }, // Icon on the FAB
@@ -98,5 +102,5 @@ fun GeneralReportScreen(
 @Preview(showBackground = true)
 @Composable
 fun GenScreenPreview() {
-    GeneralReportScreen()
+    GeneralReportScreen(navController = NavHostController(LocalContext.current), onBack = {})
 }

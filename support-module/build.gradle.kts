@@ -60,6 +60,7 @@ dependencies {
 
     // ROOM
     implementation(libs.room.runtime)
+//    implementation(project(":app"))
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.ktx)
 
