@@ -42,6 +42,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     context: Context,
     viewModel: StageViewModel = hiltViewModel(),
+    onSync: () -> Unit,
     onNext: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -62,6 +63,7 @@ fun HomeScreen(
                 navigationAction = onBack,
                 disableNavigation = false,
                 actionState = ToolbarActionState(filterVisibility = false),
+                syncAction = onSync,
             )
         },
         floatingActionButton = {
