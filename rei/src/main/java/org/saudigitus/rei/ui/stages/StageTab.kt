@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ScrollableTabRow
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
+import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -54,10 +54,10 @@ fun StageTab(
         ) {
             ScrollableTabRow(
                 selectedTabIndex = tabState,
-                backgroundColor = Color.White,
+                containerColor = Color.White,
                 edgePadding = 0.dp,
                 indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
+                    SecondaryIndicator(
                         modifier = Modifier
                             .fillMaxWidth()
                             .tabIndicatorOffset(tabPositions[tabState])

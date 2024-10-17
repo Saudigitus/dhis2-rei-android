@@ -6,4 +6,7 @@
     <string name="overdue">Atrasado</string>
     <string name="vaccinated">Vacinado</string>
     <string name="not_vaccinated">Zero dose</string>
+    <string name="back">Back</string>
+    <string name="filter">Filters</string>
+    <string name="patients">Pacientes</string>
 </resources>
