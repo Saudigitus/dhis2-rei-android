@@ -20,8 +20,10 @@ import com.saudigitus.support_module.ui.Screen
 import com.saudigitus.support_module.ui.manualScreen.ManualScreen
 import com.saudigitus.support_module.ui.theme.SupportUiTheme
 import com.saudigitus.support_module.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import org.dhis2.ui.theme.Dhis2Theme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

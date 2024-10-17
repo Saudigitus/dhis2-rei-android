@@ -32,8 +32,6 @@ fun CustomCard(imageResId: Int, title: String, onClick: () -> Unit) {
             .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
-
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

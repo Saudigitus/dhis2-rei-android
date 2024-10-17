@@ -1,6 +1,10 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
+    id("kotlinx-serialization")
+    id("kotlin-parcelize")
+    id("dagger.hilt.android.plugin")
     alias(libs.plugins.kotlin.compose.compiler)
 }
 
@@ -49,6 +53,19 @@ android {
 }
 
 dependencies {
+    // HILT
+    implementation(libs.androidx.compose.lifecycle)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.dagger.hilt.android)
+
+    // ROOM
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    // PDF VIEWER
+    implementation(libs.io.github.grizzi91)
+
     implementation(project(":commons"))
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.appcompat)
@@ -71,4 +88,8 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
     debugImplementation(libs.androidx.compose.uitooling)
     debugImplementation(libs.test.ui.test.manifest)
+
+    kapt(libs.room.compiler)
+    kapt(libs.dagger.compiler)
+    kapt(libs.dagger.hilt.android.compiler)
 }
