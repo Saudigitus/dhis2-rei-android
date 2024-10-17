@@ -31,8 +31,6 @@ import org.dhis2.utils.HelpManager
 import org.dhis2.utils.analytics.SELECT_PROGRAM
 import org.dhis2.utils.analytics.TYPE_PROGRAM_SELECTED
 import org.dhis2.utils.granularsync.SyncStatusDialog
-import org.saudigitus.rei.ui.stages.StageViewModel
-import org.saudigitus.rei.ui.stages.StageViewModelFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,15 +39,8 @@ class ProgramFragment : FragmentGlobalAbstract(), ProgramView {
     @Inject
     lateinit var programViewModelFactory: ProgramViewModelFactory
 
-    @Inject
-    lateinit var stageViewModelFactory: StageViewModelFactory
-
     val programViewModel: ProgramViewModel by viewModels {
         programViewModelFactory
-    }
-
-    val stageViewModel: StageViewModel by viewModels {
-        stageViewModelFactory
     }
 
     @Inject
@@ -86,7 +77,6 @@ class ProgramFragment : FragmentGlobalAbstract(), ProgramView {
                     programViewModel.setIsDownloading()
                 }
                 ProgramList(
-                    stageViewModel = stageViewModel,
                     downLoadState = state,
                     programs = items,
                     onItemClick = {

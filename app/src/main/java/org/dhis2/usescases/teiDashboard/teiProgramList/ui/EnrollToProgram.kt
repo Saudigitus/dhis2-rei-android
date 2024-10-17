@@ -112,6 +112,7 @@ private fun testingProgramModel(downloadState: ProgramDownloadState) = ProgramUi
     state = State.SYNCED,
     downloadState = downloadState,
     stockConfig = null,
+    isRei = false,
     lastUpdated = Date(),
 )
 

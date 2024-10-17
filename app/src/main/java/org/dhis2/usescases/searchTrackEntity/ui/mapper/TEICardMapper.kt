@@ -62,7 +62,7 @@ class TEICardMapper(
             actionButton = { ProvideSyncButton(searchTEIModel, onSyncIconClick) },
             expandLabelText = resourceManager.getString(R.string.show_more),
             shrinkLabelText = resourceManager.getString(R.string.show_less),
-            status = style.first,
+            status = context.getString(style.first),
             onCardCLick = onCardClick,
         )
     }

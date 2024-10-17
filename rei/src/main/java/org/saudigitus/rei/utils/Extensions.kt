@@ -4,8 +4,8 @@ import org.dhis2.commons.date.DateUtils
 import org.hisp.dhis.android.core.D2
 import org.hisp.dhis.android.core.arch.repositories.scope.RepositoryScope
 import org.hisp.dhis.android.core.event.EventStatus
-import org.saudigitus.rei.data.model.AppConfig
-import org.saudigitus.rei.utils.Utils.fromJson
+import org.saudigitus.rei.data.model.AppConfigItem
+import org.saudigitus.rei.utils.Utils.buildListFromJson
 import java.util.Locale
 
 fun String.capital() = this.replaceFirstChar {
@@ -29,7 +29,6 @@ fun D2.countEventsByStatusToday(
     .byStatus().eq(eventStatus)
     .blockingCount()
 
-
 fun D2.overdueEventCount(
     program: String,
     stage: String,
@@ -44,18 +43,17 @@ fun D2.eventOrderedByDateDesc(enrollment: String) = eventModule().events()
     .orderByEventDate(RepositoryScope.OrderByDirection.DESC)
     .one().blockingGet()
 
-
-fun D2.reiModuleDatastore(): AppConfig? {
+fun D2.reiModuleDatastore(): List<AppConfigItem> {
     val datastore = dataStoreModule().dataStore()
         .byNamespace().eq(Constants.NAMESPACE)
         .byKey().eq(Constants.KEY)
         .one().blockingGet()
-    return fromJson<AppConfig>(datastore?.value())
+    return buildListFromJson<AppConfigItem>(datastore?.value()) ?: emptyList()
 }
 
 fun D2.isEventOverdue(
     enrollment: String,
-    stage: String
+    stage: String,
 ) = eventModule().events()
     .byEnrollmentUid().eq(enrollment)
     .byProgramStageUid().eq(stage)
