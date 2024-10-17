@@ -9,4 +9,5 @@
     <string name="back">Back</string>
     <string name="filter">Filters</string>
     <string name="patients">Pacientes</string>
+    <string name="sync_offline_check_connection">You\'re currently offline. Please check your internet connection to continue syncing.</string>
 </resources>
