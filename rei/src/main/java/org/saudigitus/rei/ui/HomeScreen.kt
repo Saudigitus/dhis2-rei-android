@@ -81,7 +81,6 @@ fun HomeScreen(
                     )
                 },
                 onClick = { },
-                containerColor = seed,
                 contentColor = Color.White,
             )
         },
