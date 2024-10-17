@@ -10,4 +10,7 @@
     <string name="other_errors">Relatar outros erros</string>
     <string name="support_view_subtitle"><![CDATA[Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s]]></string>
     <string name="user_manual_title">Manual do Utilizador</string>
+    <string name="fk_message">Missing %s %s from %s %s</string>
+    <string name="sync_errors_view_title">Relatar erros de sincronização</string>
+    <string name="sync_errors">Erros de sincronização</string>
 </resources>

@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -20,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,24 +30,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ErrorComponent
 import com.saudigitus.support_module.ui.components.ListCard
 import com.saudigitus.support_module.ui.MenuScreen
+import com.saudigitus.support_module.ui.SupportScreen.ErrorsViewModel
 
 @Composable
 fun ErrorsScreen(
     navController: NavHostController,
     onBack: () -> Unit
 ) {
+    val viewModel = hiltViewModel<ErrorsViewModel>()
+    val errorsUiState by viewModel.errorsUiState.collectAsStateWithLifecycle()
+
+
     BasicApp(
-        title = "Relatar erro de sincronização",
+        title = stringResource(id = R.string.sync_errors_view_title) ,
         onBack = onBack,
         content = {
         Column(
@@ -57,16 +68,23 @@ fun ErrorsScreen(
         ) {
             Column {
                 Text(
-                    text = "Erros de sincronização",
+                    text =(errorsUiState.errorsItems.size.toString())+ " "+ stringResource(id = R.string.sync_errors),
                     fontSize = 16.sp,
                     color = Color.Gray
                 )
                 Spacer(Modifier.height(10.dp))
-                ErrorComponent("Error It is a long established fact reader")
-                Spacer(Modifier.height(10.dp))
-                ErrorComponent("Error It is a long established fact reader")
-                Spacer(Modifier.height(10.dp))
-                ErrorComponent("Error It is a long established fact reader")
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(errorsUiState.errorsItems) { error ->
+                        ErrorComponent(
+                            error = error.errorDescription.toString(),
+                            type = error.errorCode.toString(),
+                            date = error.creationDate.toString())
+                    }
+                }
             }
 
             val textState = remember { mutableStateOf("") }
@@ -76,8 +94,8 @@ fun ErrorsScreen(
                 onValueChange = { textState.value = it },
                 label = { Text(text = "Message") },
                 modifier = Modifier.fillMaxWidth(),
-                minLines = 8,
-                maxLines = 8, // Allows up to 5 lines
+                minLines = 6,
+                maxLines = 6,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Default // Allows multiline input
                 )

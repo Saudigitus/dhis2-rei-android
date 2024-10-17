@@ -33,9 +33,6 @@ fun SupportScreen(
     navController: NavHostController,
     onBack: () -> Unit = {} // Placeholder for back action
 ) {
-    val viewModel = hiltViewModel<ErrorsViewModel>()
-    val context = LocalContext.current
-
     BasicApp(
         title = stringResource(id = R.string.support_view_title),
         onBack = onBack,

@@ -1,12 +1,15 @@
 package com.saudigitus.support_module.di
 
 import android.app.Application
+import androidx.compose.ui.res.stringResource
 import androidx.room.Room
+import com.saudigitus.support_module.R
 import com.saudigitus.support_module.data.local.ManualsRepository
 import com.saudigitus.support_module.data.local.SyncErrorsRepository
 import com.saudigitus.support_module.data.local.database.AppDatabase
 import com.saudigitus.support_module.data.local.repository.ManualsRepositoryImp
 import com.saudigitus.support_module.data.local.repository.SyncErrorsRepositoryImpl
+import com.saudigitus.support_module.utils.ErrorModelMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,11 +39,11 @@ object AppModule {
     }
 
     /**
-     * Inject ManualsRepository
+     * Inject SyncErrorsRepository
      */
     @Provides
-    @Singleton fun providesSyncErrorsRepository(appDatabase: AppDatabase, d2: D2): SyncErrorsRepository {
-        return SyncErrorsRepositoryImpl(d2 = d2)
+    @Singleton fun providesSyncErrorsRepository(app: Application, d2: D2): SyncErrorsRepository {
+        return SyncErrorsRepositoryImpl(errorMapper = ErrorModelMapper(fkMessage = app.getString(R.string.fk_message)), d2 = d2)
     }
 
 }
