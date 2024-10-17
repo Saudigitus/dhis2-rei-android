@@ -3,4 +3,7 @@
     <string name="effective">Efectivados</string>
     <string name="pending">Pendentes</string>
     <string name="late">Atrasados</string>
+    <string name="overdue">Atrasado</string>
+    <string name="vaccinated">Vacinado</string>
+    <string name="not_vaccinated">Zero dose</string>
 </resources>
