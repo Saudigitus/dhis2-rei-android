@@ -33,6 +33,7 @@ class ProgramViewModelMapper() {
             state = State.valueOf(state.name),
             downloadState = ProgramDownloadState.NONE,
             stockConfig = null,
+            isRei = false,
             lastUpdated = program.lastUpdated() ?: Date(),
         )
     }
@@ -58,6 +59,7 @@ class ProgramViewModelMapper() {
             state = dataSetInstanceSummary.state(),
             downloadState = ProgramDownloadState.NONE,
             stockConfig = null,
+            isRei = false,
             lastUpdated = dataSet.lastUpdated() ?: Date(),
         )
     }

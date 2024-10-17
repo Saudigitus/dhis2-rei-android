@@ -16,7 +16,6 @@ import org.dhis2.data.service.SyncStatusController
 import org.hisp.dhis.android.core.D2
 import org.saudigitus.rei.data.source.DataManager
 import org.saudigitus.rei.data.source.repository.DataManagerImpl
-import org.saudigitus.rei.ui.stages.StageViewModelFactory
 
 @Module
 class ProgramModule(private val view: ProgramView) {
@@ -38,12 +37,6 @@ class ProgramModule(private val view: ProgramView) {
             matomoAnalyticsController,
             syncStatusController,
         )
-    }
-
-    @Provides
-    @PerFragment
-    internal fun stageViewModelFactory(dataManager: DataManager): StageViewModelFactory {
-        return StageViewModelFactory(dataManager)
     }
 
     @Provides
