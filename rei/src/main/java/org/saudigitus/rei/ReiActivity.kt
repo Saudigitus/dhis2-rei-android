@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.dhis2.ui.theme.Dhis2Theme
+import org.saudigitus.rei.navigator.ReiNavigator
 import org.saudigitus.rei.ui.HomeScreen
 import org.saudigitus.rei.ui.stages.StageViewModel
 
@@ -27,11 +28,18 @@ class ReiActivity : FragmentActivity() {
                 viewModel.setBundle(intent?.extras)
 
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    HomeScreen(context = this@ReiActivity) {
+                    HomeScreen(context = this@ReiActivity, onNext = ::launchLineListing) {
                         finish()
                     }
                 }
             }
         }
+    }
+
+    private fun launchLineListing() {
+        ReiNavigator(
+            activity = this@ReiActivity,
+            intent?.extras!!,
+        ).navigateToLineListing()
     }
 }

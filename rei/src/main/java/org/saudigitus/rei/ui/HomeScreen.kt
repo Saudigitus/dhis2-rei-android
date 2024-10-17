@@ -42,6 +42,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     context: Context,
     viewModel: StageViewModel = hiltViewModel(),
+    onNext: () -> Unit,
     onBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -80,7 +81,7 @@ fun HomeScreen(
                         contentDescription = null,
                     )
                 },
-                onClick = { },
+                onClick = onNext::invoke,
                 contentColor = Color.White,
             )
         },

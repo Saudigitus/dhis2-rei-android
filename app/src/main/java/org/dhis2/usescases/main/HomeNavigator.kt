@@ -98,6 +98,7 @@ fun ActivityResultLauncher<Intent>.navigateTo(context: Context, homeItemData: Ho
 
         is HomeItemData.TrackerProgram -> {
             if (homeItemData.isRei) {
+                bundle.putString(Constants.TRACKED_ENTITY_UID, homeItemData.trackedEntityType)
                 Intent(context, ReiActivity::class.java).apply {
                     putExtras(bundle)
                     launch(this)

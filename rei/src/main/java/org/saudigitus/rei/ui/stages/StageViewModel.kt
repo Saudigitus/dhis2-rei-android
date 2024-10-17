@@ -40,7 +40,7 @@ class StageViewModel @Inject constructor(
     val config: StateFlow<AppConfigItem?> = _config
 
     private val _program = MutableStateFlow("")
-    private val program: StateFlow<String> = _program
+    val program: StateFlow<String> = _program
 
     private fun loadConfig(program: String) {
         viewModelScope.launch {
