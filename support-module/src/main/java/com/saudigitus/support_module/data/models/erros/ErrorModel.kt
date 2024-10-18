@@ -2,7 +2,7 @@ package com.saudigitus.support_module.data.models.erros
 
 import java.util.Date
 
-data class ErrorViewModel(
+data class ErrorModel(
     val creationDate: Date?,
     val errorCode: String?,
     val errorDescription: String?,

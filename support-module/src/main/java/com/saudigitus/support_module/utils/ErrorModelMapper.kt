@@ -1,6 +1,6 @@
 package com.saudigitus.support_module.utils
 
-import com.saudigitus.support_module.data.models.erros.ErrorViewModel
+import com.saudigitus.support_module.data.models.erros.ErrorModel
 import org.hisp.dhis.android.core.imports.TrackerImportConflict
 import org.hisp.dhis.android.core.maintenance.D2Error
 import org.hisp.dhis.android.core.maintenance.ForeignKeyViolation
@@ -11,14 +11,14 @@ class ErrorModelMapper(private val fkMessage: String) {
         const val FK = "FK"
     }
 
-    fun mapD2Error(errors: List<D2Error>): List<ErrorViewModel> {
+    fun mapD2Error(errors: List<D2Error>): List<ErrorModel> {
         return errors.map {
             map(it)
         }
     }
 
-    fun map(error: D2Error): ErrorViewModel {
-        return ErrorViewModel(
+    fun map(error: D2Error): ErrorModel {
+        return ErrorModel(
             error.created(),
             error.httpErrorCode().toString(),
             error.errorDescription(),
@@ -26,14 +26,14 @@ class ErrorModelMapper(private val fkMessage: String) {
         )
     }
 
-    fun mapConflict(conflicts: List<TrackerImportConflict>): List<ErrorViewModel> {
+    fun mapConflict(conflicts: List<TrackerImportConflict>): List<ErrorModel> {
         return conflicts.map {
             map(it)
         }
     }
 
-    fun map(conflict: TrackerImportConflict): ErrorViewModel {
-        return ErrorViewModel(
+    fun map(conflict: TrackerImportConflict): ErrorModel {
+        return ErrorModel(
             conflict.created(),
             conflict.errorCode(),
             conflict.displayDescription() ?: conflict.conflict(),
@@ -41,18 +41,18 @@ class ErrorModelMapper(private val fkMessage: String) {
         )
     }
 
-    fun mapFKViolation(fKViolations: List<ForeignKeyViolation>): List<ErrorViewModel> {
+    fun mapFKViolation(fKViolations: List<ForeignKeyViolation>): List<ErrorModel> {
         return fKViolations.map {
             map(it)
         }
     }
 
-    fun map(fKViolation: ForeignKeyViolation): ErrorViewModel {
+    fun map(fKViolation: ForeignKeyViolation): ErrorModel {
         val toTable = fKViolation.toTable() ?: ""
         val fromTable = fKViolation.fromTable() ?: ""
         val toUid = fKViolation.notFoundValue() ?: ""
         val fromUid = fKViolation.fromObjectUid() ?: ""
-        return ErrorViewModel(
+        return ErrorModel(
             fKViolation.created(),
             FK,
             fkMessage.format(toTable, toUid, fromTable, fromUid),
