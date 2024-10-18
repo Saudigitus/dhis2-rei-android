@@ -89,7 +89,7 @@ fun GeneralReportScreen(
             TextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },
-                label = { Text(text = "Message") },
+                label = { Text(text = stringResource(id = R.string.textarea_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 20,
                 maxLines = 20, // Allows up to 5 lines

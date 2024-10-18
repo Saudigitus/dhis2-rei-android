@@ -16,4 +16,5 @@
     <string name="general_errors_view_title">Relatar outros erros</string>
     <string name="fab_send_lb">Enviar</string>
     <string name="general_errors_view_lb">Descreva com detalhes o erro decorrido com passos para que a equipa possa reproduzir</string>
+    <string name="textarea_label">Descrição do erro</string>
 </resources>

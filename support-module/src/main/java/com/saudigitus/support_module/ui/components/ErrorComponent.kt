@@ -30,7 +30,6 @@ fun ErrorComponent(error: String, type: String, comp: String, date: String) {
         modifier = Modifier
             .border(1.dp, Color.Red, RoundedCornerShape(8.dp)) // Red border
     ) {
-        // Applying background to the entire card content
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -49,7 +48,7 @@ fun ErrorComponent(error: String, type: String, comp: String, date: String) {
                     color = Color.Gray
                 )
                 Text(
-                    text = type +" "+ comp,
+                    text = "$type $comp",
                     fontSize = 10.sp,
                     color = Color.Red
                 )

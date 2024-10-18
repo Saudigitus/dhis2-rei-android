@@ -12,27 +12,6 @@ class SyncErrorsRepositoryImpl(
     private val d2: D2,
     private val errorMapper: ErrorModelMapper,
 ): SyncErrorsRepository {
-    /*override fun getSyncErrors() {
-
-        val errors: MutableList<ErrorViewModel> = ArrayList()
-        errors.addAll(
-            errorMapper.mapD2Error(d2.maintenanceModule().d2Errors().blockingGet()),
-        )
-        errors.addAll(
-            errorMapper.mapConflict(
-                d2.importModule().trackerImportConflicts().blockingGet(),
-            ),
-        )
-        errors.addAll(
-            errorMapper.mapFKViolation(
-                d2.maintenanceModule().foreignKeyViolations().blockingGet(),
-            ),
-        )
-        //errors
-        Timber.d("ERRORS_LIST: $errors")
-
-    }*/
-
     override fun getSyncErrors(): Flow<List<ErrorViewModel>> {
 
         val errors: MutableList<ErrorViewModel> = ArrayList()
@@ -49,8 +28,6 @@ class SyncErrorsRepositoryImpl(
                 d2.maintenanceModule().foreignKeyViolations().blockingGet(),
             ),
         )
-        //errors
-        Timber.d("ERRORS_LIST: $errors")
        return flowOf(errors.toList())
     }
 }

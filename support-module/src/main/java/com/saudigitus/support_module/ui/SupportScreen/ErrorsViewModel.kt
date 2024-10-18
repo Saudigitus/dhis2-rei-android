@@ -38,6 +38,4 @@ class ErrorsViewModel @Inject internal constructor(
     init {
         getErrors()
     }
-
-
 }

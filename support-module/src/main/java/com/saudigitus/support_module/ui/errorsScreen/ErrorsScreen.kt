@@ -3,7 +3,6 @@ package com.example.viewtest.ui.manualScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -42,8 +36,6 @@ import androidx.navigation.NavHostController
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ErrorComponent
-import com.saudigitus.support_module.ui.components.ListCard
-import com.saudigitus.support_module.ui.MenuScreen
 import com.saudigitus.support_module.ui.SupportScreen.ErrorsViewModel
 import com.saudigitus.support_module.ui.theme.app_blue_color
 
@@ -105,12 +97,12 @@ fun ErrorsScreen(
             TextField(
                 value = textState.value,
                 onValueChange = { textState.value = it },
-                label = { Text(text = "Message") },
+                label = { Text(text = stringResource(id = R.string.textarea_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 6,
                 maxLines = 6,
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Default // Allows multiline input
+                    imeAction = ImeAction.Default
                 )
             )
             Spacer(Modifier.height(20.dp))

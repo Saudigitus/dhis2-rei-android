@@ -68,7 +68,6 @@ fun SimpleCard(
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                // modifier = Modifier.size(48.dp),
                 tint = Color.Black
             )
         }
