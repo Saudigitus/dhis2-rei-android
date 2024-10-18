@@ -83,6 +83,7 @@ import org.hisp.dhis.mobile.ui.designsystem.component.state.rememberListCardStat
 import org.hisp.dhis.mobile.ui.designsystem.theme.Spacing
 import org.hisp.dhis.mobile.ui.designsystem.theme.SurfaceColor
 import org.hisp.dhis.mobile.ui.designsystem.theme.TextColor
+import timber.log.Timber
 import java.util.Date
 
 enum class ProgramLayout {
@@ -116,7 +117,7 @@ fun ProgramList(
             if (programs.isEmpty()) {
                 NoAccessMessage()
             }
-
+            Timber.tag("ProgramList").e("${programs.size}")
             ExpandableItemColumn(
                 modifier = Modifier
                     .fillMaxSize(),

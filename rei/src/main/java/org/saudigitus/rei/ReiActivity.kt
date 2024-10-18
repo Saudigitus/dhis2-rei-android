@@ -34,7 +34,7 @@ class ReiActivity : FragmentActivity() {
                     HomeScreen(
                         context = this@ReiActivity,
                         onSync = ::syncProgram,
-                        onNext = ::launchLineListing
+                        onNext = ::launchLineListing,
                     ) {
                         finish()
                     }
@@ -57,7 +57,6 @@ class ReiActivity : FragmentActivity() {
             },
         ).show()
     }
-
 
     private fun launchLineListing() {
         ReiNavigator(
