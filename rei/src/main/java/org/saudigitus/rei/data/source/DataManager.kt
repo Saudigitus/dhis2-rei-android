@@ -14,5 +14,5 @@ interface DataManager {
     suspend fun getStageEventData(
         program: String,
         stage: String,
-    ): List<Triple<String, Int, Color>>
+    ): List<Triple<String, String, Color>>
 }
