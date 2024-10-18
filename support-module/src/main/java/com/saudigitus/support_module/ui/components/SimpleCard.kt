@@ -1,5 +1,6 @@
 package com.saudigitus.support_module.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,15 +26,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saudigitus.support_module.ui.theme.Blue700
+import org.hisp.dhis.mobile.ui.designsystem.theme.Radius
+import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
 
 @Composable
-fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector) {
+fun SimpleCard(
+    title: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .size(width = 0.dp, height = 70.dp)
-            .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
+            .dropShadow(shape = RoundedCornerShape(Radius.XS))
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(Radius.XS),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
     ){
@@ -53,13 +62,12 @@ fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVec
                     text = title,
                     fontSize = 14.sp,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black
+                    color = Blue700
                 )
             }
             Icon(
                 imageVector = icon,
                 contentDescription = title,
-                // modifier = Modifier.size(48.dp),
                 tint = Color.Black
             )
         }
@@ -69,5 +77,5 @@ fun SimpleCard(title: String, icon: androidx.compose.ui.graphics.vector.ImageVec
 @Preview(showBackground = true)
 @Composable
 fun SimpleCardPreview() {
-    SimpleCard(title = "Manual subtitle here alfa", icon = Icons.AutoMirrored.Filled.KeyboardArrowRight)
+    SimpleCard(title = "Manual subtitle here alfa", icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, onClick = {})
 }

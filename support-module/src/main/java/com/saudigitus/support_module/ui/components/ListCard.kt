@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.ManualsUiState
+import org.hisp.dhis.mobile.ui.designsystem.theme.Radius
+import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
 
 @Composable
 fun ListCard(
@@ -45,11 +47,11 @@ fun ListCard(
         modifier = Modifier
             .fillMaxWidth()
             .size(width = 0.dp, height = 80.dp)
-            .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .dropShadow(shape = RoundedCornerShape(Radius.XS))
             .clickable(onClick = onClick),
+        shape = RoundedCornerShape(Radius.XS),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(50.dp),
+        elevation = CardDefaults.cardElevation(10.dp),
         ){
         Row(
             modifier = Modifier

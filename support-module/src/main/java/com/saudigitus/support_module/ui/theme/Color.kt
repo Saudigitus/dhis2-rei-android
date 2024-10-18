@@ -2,6 +2,7 @@ package com.saudigitus.support_module.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Blue700: Color = Color(0xFF1260BA)
 val md_theme_light_primary = Color(0xFF0062A2)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFFD1E4FF)

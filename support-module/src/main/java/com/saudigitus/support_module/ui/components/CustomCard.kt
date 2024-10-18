@@ -21,15 +21,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.saudigitus.support_module.ui.theme.Blue700
+import org.hisp.dhis.mobile.ui.designsystem.theme.Radius
+import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
 
 @Composable
 fun CustomCard(imageResId: Int, title: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .size(150.dp)
-            .shadow(2.dp, RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .dropShadow(shape = RoundedCornerShape(Radius.XS))
+            .clip(RoundedCornerShape(10.dp))
             .clickable { onClick() },
+        shape = RoundedCornerShape(Radius.XS),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(50.dp),
     ) {
@@ -46,7 +50,7 @@ fun CustomCard(imageResId: Int, title: String, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
-                color = Color.Black,
+                color = Blue700,
                 fontWeight = FontWeight.Bold
             )
         }
