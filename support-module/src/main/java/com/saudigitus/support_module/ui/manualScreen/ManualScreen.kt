@@ -19,9 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,9 +76,9 @@ fun ManualScreen(
             ) {
                 items(uiState.manualItems) { manual ->
                     ListCard(
-                        imageResId = R.drawable.manual_icon, title = manual.title,
+                        imageResId = R.drawable.manual, title = manual.title,
                         subtitle = manual.subtitle.toString(),
-                        icon = Icons.Default.ArrowDownward,
+                        icon = R.drawable.error,
                         onClick = {
                             val file = viewModel.open(context = context,fileName = manual.uid)
                             if(file.isFile){

@@ -1,5 +1,6 @@
 package com.saudigitus.support_module.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,10 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.theme.Blue700
 import org.hisp.dhis.mobile.ui.designsystem.theme.Radius
 import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
@@ -33,7 +36,7 @@ import org.hisp.dhis.mobile.ui.designsystem.theme.dropShadow
 @Composable
 fun SimpleCard(
     title: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: Int,
     onClick: () -> Unit) {
     Card(
         modifier = Modifier
@@ -65,10 +68,10 @@ fun SimpleCard(
                     color = Blue700
                 )
             }
-            Icon(
-                imageVector = icon,
-                contentDescription = title,
-                tint = Color.Black
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
             )
         }
     }
@@ -77,5 +80,5 @@ fun SimpleCard(
 @Preview(showBackground = true)
 @Composable
 fun SimpleCardPreview() {
-    SimpleCard(title = "Manual subtitle here alfa", icon = Icons.AutoMirrored.Filled.KeyboardArrowRight, onClick = {})
+    SimpleCard(title = "Manual subtitle here alfa", icon = R.drawable.error, onClick = {})
 }

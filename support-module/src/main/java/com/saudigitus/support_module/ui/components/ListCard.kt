@@ -1,10 +1,12 @@
 package com.saudigitus.support_module.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +42,7 @@ fun ListCard(
     imageResId: Int,
     title: String,
     subtitle: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: Int,
     onClick: () -> Unit,
     state: ManualsUiState
 ) {
@@ -65,10 +68,10 @@ fun ListCard(
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
-
+            Spacer(modifier = Modifier.width(10.dp))
             Column (
                 modifier = Modifier.
-                width(220.dp),
+                width(300.dp),
                 horizontalAlignment = Alignment.Start,
             ) {
                 Text(
@@ -86,12 +89,7 @@ fun ListCard(
                     maxLines = 1
                 )
             }
-            if(!state.isDownloading)
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    tint = Color.Black
-                )
+
             if(state.isDownloading)
                 CircularProgressIndicator()
         }
@@ -101,5 +99,5 @@ fun ListCard(
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
-    ListCard(imageResId = R.drawable.manual_icon, title = "Manual title here alfa omega beta", subtitle = "Manual subtitle here alfa", onClick = {}, icon = Icons.Default.ArrowDownward, state = ManualsUiState())
+    ListCard(imageResId = R.drawable.manual, title = "Manual title here alfa omega beta", subtitle = "Manual subtitle here alfa", onClick = {}, icon =  R.drawable.manual, state = ManualsUiState())
 }

@@ -37,6 +37,8 @@ import com.saudigitus.support_module.R
 import com.saudigitus.support_module.ui.components.BasicApp
 import com.saudigitus.support_module.ui.components.ErrorComponent
 import com.saudigitus.support_module.ui.SupportScreen.ErrorsViewModel
+import com.saudigitus.support_module.ui.components.CustomTextField
+import com.saudigitus.support_module.ui.theme.NeutralVariant
 import com.saudigitus.support_module.ui.theme.app_blue_color
 
 @Composable
@@ -94,23 +96,10 @@ fun ErrorsScreen(
 
             val textState = remember { mutableStateOf("") }
             Spacer(Modifier.height(20.dp))
-            TextField(
-                value = textState.value,
-                onValueChange = { textState.value = it },
-                label = { Text(text = stringResource(id = R.string.textarea_label)) },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 6,
-                maxLines = 6,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Default
-                )
-            )
+            CustomTextField(textState = textState, label = stringResource(id = R.string.textarea_label), minLines = 6)
             Spacer(Modifier.height(20.dp))
-
         }
     })
-
-
 }
 
 @Preview(showBackground = true)
