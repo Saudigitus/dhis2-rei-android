@@ -84,8 +84,9 @@ import java.io.Serializable
 import java.util.Date
 import javax.inject.Inject
 
-
-class SearchTEActivity : ActivityGlobalAbstract(), SearchTEContractsModule.View,
+class SearchTEActivity :
+    ActivityGlobalAbstract(),
+    SearchTEContractsModule.View,
     LineListingComponentProvider {
 
     private lateinit var binding: ActivitySearchBinding
@@ -805,7 +806,7 @@ class SearchTEActivity : ActivityGlobalAbstract(), SearchTEContractsModule.View,
     override fun launch(context: Context, bundle: Bundle): Intent {
         val intent = Intent(
             context,
-            SearchTEActivity::class.java
+            SearchTEActivity::class.java,
         )
         intent.putExtras(bundle)
         return intent
