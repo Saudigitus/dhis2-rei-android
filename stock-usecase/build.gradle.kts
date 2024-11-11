@@ -89,17 +89,13 @@ dependencies {
     implementation(project(":commons"))
     implementation(project(":compose-table"))
     implementation(project(":dhis2-mobile-program-rules"))
+    implementation(project(":dhis_android_analytics"))
 
     implementation(libs.bundles.stock.implementation)
+    testImplementation(project(":dhis_android_analytics"))
     coreLibraryDesugaring(libs.bundles.stock.core)
     kapt(libs.bundles.stock.kapt)
-    debugImplementation(libs.bundles.stock.debugImplementation)
-    releaseImplementation(libs.bundles.stock.releaseImplementation)
     testImplementation(libs.bundles.stock.test)
-
-    debugImplementation(libs.analytics.flipper.network) {
-        exclude("com.squareup.okhttp3")
-    }
 }
 
 kapt {

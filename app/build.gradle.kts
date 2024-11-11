@@ -9,6 +9,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
     id("kotlinx-serialization")
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.kotlin.compose.compiler)
@@ -84,13 +85,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled = true
 
-        val defMapboxToken =
-            "pk.eyJ1IjoiZGhpczJhbmRyb2lkIiwiYSI6ImNrcWt1a2hzYzE5Ymsyb254MWtlbGt4Y28ifQ.JrP61q9BFTVEKO4SwRUwDw"
-        val mapboxAccessToken = System.getenv("MAPBOX_ACCESS_TOKEN") ?: defMapboxToken
         val bitriseSentryDSN = System.getenv("SENTRY_DSN") ?: ""
 
         buildConfigField("String", "SDK_VERSION", "\"" + libs.versions.dhis2sdk.get() + "\"")
-        buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"" + mapboxAccessToken + "\"")
         buildConfigField("String", "MATOMO_URL", "\"https://usage.analytics.dhis2.org/matomo.php\"")
         buildConfigField("long", "VERSION_CODE", "${defaultConfig.versionCode}")
         buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
@@ -288,15 +285,6 @@ dependencies {
     implementation(project(":rei"))
 
     coreLibraryDesugaring(libs.desugar)
-
-    debugImplementation(libs.analytics.flipper)
-    debugImplementation(libs.analytics.soloader)
-    debugImplementation(libs.analytics.flipper.network)
-    debugImplementation(libs.analytics.flipper.leak)
-    debugImplementation(libs.analytics.leakcanary)
-
-    releaseImplementation(libs.analytics.leakcanary.noop)
-    releaseImplementation(libs.analytics.flipper.noop)
 
     "dhisPlayServicesImplementation"(libs.google.auth)
     "dhisPlayServicesImplementation"(libs.google.auth.apiphone)

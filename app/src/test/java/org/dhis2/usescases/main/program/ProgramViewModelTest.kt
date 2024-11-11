@@ -1,11 +1,11 @@
 package org.dhis2.usescases.main.program
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.setMain
 import org.dhis2.commons.featureconfig.data.FeatureConfigRepository
@@ -17,7 +17,7 @@ import org.dhis2.ui.MetadataIconData
 import org.dhis2.ui.toColor
 import org.dhis2.utils.MainCoroutineScopeRule
 import org.hisp.dhis.android.core.common.State
-import org.hisp.dhis.mobile.ui.designsystem.component.internal.ImageCardData
+import org.hisp.dhis.mobile.ui.designsystem.component.ImageCardData
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -83,7 +83,7 @@ class ProgramViewModelTest {
 
         whenever(
             syncStatusController.observeDownloadProcess(),
-        ) doReturn MutableLiveData(syncStatusData)
+        ) doReturn MutableStateFlow(syncStatusData)
         whenever(programRepository.homeItems(any())) doReturn programsFlowable
 
         presenter.init()

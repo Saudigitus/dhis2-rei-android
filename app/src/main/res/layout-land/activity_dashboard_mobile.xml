@@ -45,15 +45,16 @@
                     style="@style/ActionIcon"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/relationshipMapIcon"
+                    app:layout_constraintEnd_toStartOf="@id/relationshipIcon"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_sync"
                     app:tint="?colorOnPrimary"
                     tools:ignore="ContentDescription" />
 
-                <ImageView
-                    android:id="@+id/relationshipMapIcon"
-                    style="@style/ActionIcon"
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/relationshipIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/moreOptions"
@@ -63,16 +64,14 @@
                     tools:ignore="ContentDescription"
                     tools:visibility="visible" />
 
-                <ImageView
-                    android:id="@+id/moreOptions"
-                    style="@style/ActionIcon"
-                    android:layout_height="match_parent"
-                    android:onClick="showMoreOptions"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_more"
-                    tools:ignore="ContentDescription" />
+                <androidx.compose.ui.platform.ComposeView
+                  android:id="@+id/moreOptions"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  />
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/progressGuideline"
@@ -158,7 +157,6 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@color/white"
-                    android:elevation="3dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/guideline625"
                     app:layout_constraintStart_toEndOf="@id/guideline25"

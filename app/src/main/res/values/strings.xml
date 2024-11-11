@@ -105,7 +105,7 @@
     <string name="finish_and_complete">Finish and complete</string>
     <string name="completed">Completed</string>
     <string name="cancelled">Cancelled</string>
-    <string name="re_open">re-open</string>
+    <string name="re_open">Re-open</string>
     <string name="re_open_form">Re-open form</string>
     <string name="activate">Activate</string>
     <string name="active">Active</string>
@@ -147,6 +147,7 @@
     <string name="there_is_no_available_period">There is no available periods to select.</string>
     <!--Event Detail-->
     <string name="due_date">Due date</string>
+    <string name="next_event">Next %1$s</string>
     <string name="cat_combo">Cat combo</string>
     <string name="date_default">DD/MM/YYYY</string>
     <string name="cancel">Cancel</string>
@@ -433,7 +434,6 @@
     <string name="tuto_main_10">Log out to change user or server. You will be able to log in again even if there is no internet connection.</string>
     <string name="text_plus_colon">%s:</string>
     <string name="relationships">relationships</string>
-    <string name="empty_relationships">There are no relationships, click "+" to add a new one.</string>
     <string name="empty_tei_add">There are no events registered, click "+" to add a new one.</string>
     <string name="empty_tei_no_add">There are no events registered.</string>
     <string name="qr_data_values">Data values</string>
@@ -742,9 +742,9 @@
     <string name="error_init_session">We could not init the session with your user</string>
     <string name="enrollment_date_edition_warning">There are planned events that won\'t be re-scheduled</string>
     <string name="section_charts">Charts</string>
-    <string name="navigation_list_view">List view</string>
+    <string name="navigation_list_view">List</string>
     <string name="navigation_table_view">Table view</string>
-    <string name="navigation_map_view">Map view</string>
+    <string name="navigation_map_view">Map</string>
     <string name="navigation_analytics">Analytics</string>
     <string name="navigation_tasks">Tasks</string>
     <string name="navigation_programs">Programs</string>
@@ -752,6 +752,7 @@
     <string name="navigation_relationships">Relations</string>
     <string name="navigation_notes">Notes</string>
     <string name="navigation_data_entry">Data entry</string>
+    <string name="navigation_form">Form</string>
     <string name="navigation_tei_data">Details</string>
     <string name="show_bar_graph">View as Bar</string>
     <string name="show_line_graph">View as Line</string>
@@ -949,7 +950,6 @@
     <string name="sync_warning">Sync warning</string>
     <string name="sync_error">Sync Error</string>
     <string name="mark_follow_up">Mark for follow-up</string>
-    <string name="remove">Remove</string>
     <string name="coordinates">Coordinates</string>
     <string name="no_data_access">You don’t have access to data.\nContact your administrator.</string>
     <string name="sync_offline_check_connection">Looks like you\'re offline. Please check you connection</string>
@@ -959,6 +959,11 @@
     <string name="remove_enrollment_dialog_message">Data from %s will de deleted. This action cannot be undone.</string>
     <string name="schedule_next">Schedule next</string>
     <string name="schedule">Schedule</string>
+    <string name="enter">Enter</string>
+    <string name="refer">Refer</string>
+    <string name="scheduled_enter_event">Scheduled</string>
+    <string name="enter_event">Enter %1$s</string>
+    <string name="cancel_event">Cancel %1$s</string>
     <string name="program_stage">Program stage</string>
     <string name="event">event</string>
     <string name="timeline">Timeline</string>
@@ -986,6 +991,8 @@
     <string name="transfer_tei_org_sheet_title">Transfer %s</string>
     <string name="transfer_tei_org_sheet_description">From %s to…</string>
     <string name="successfully_transferred">Successfully transferred</string>
+    <string name="event_cancelled">%1$s cancelled</string>
+    <string name="due_date_updated">Due date updated</string>
 
     <string name="enrollment_org_unit">Enrollment org unit</string>
     <string name="event_event">Event event</string>

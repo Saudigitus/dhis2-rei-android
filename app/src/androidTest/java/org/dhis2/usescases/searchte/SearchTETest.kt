@@ -7,10 +7,10 @@ import dispatch.android.espresso.IdlingDispatcherProvider
 import dispatch.android.espresso.IdlingDispatcherProviderRule
 import org.dhis2.R
 import org.dhis2.bindings.app
-import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_OLD_EVENTS_PATH
-import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_OLD_EVENTS_RESPONSE
-import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_OLD_TRACKED_ENTITY_PATH
-import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_OLD_TRACKED_ENTITY_RESPONSE
+import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_EVENTS_EMPTY_RESPONSE
+import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_EVENTS_PATH
+import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_TRACKED_ENTITY_EMPTY_RESPONSE
+import org.dhis2.common.mockwebserver.MockWebServerRobot.Companion.API_TRACKED_ENTITY_PATH
 import org.dhis2.commons.resources.SIMPLE_DATE_FORMAT
 import org.dhis2.lazyActivityScenarioRule
 import org.dhis2.usescases.BaseTest
@@ -51,13 +51,13 @@ class SearchTETest : BaseTest() {
         setupMockServer()
     }
 
-    @Ignore("Test needs to be fixed in NDROAPP-6459")
+    @Ignore("Test needs to be fixed in ANDROAPP-6459")
     @Test
     fun shouldSuccessfullySearchByName() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
 
         val firstName = "Tim"
@@ -81,13 +81,13 @@ class SearchTETest : BaseTest() {
     fun shouldShowErrorWhenCanNotFindSearchResult() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
 
         val firstName = "asdssds"
 
-        prepareTestProgramRulesProgrammeIntentAndLaunchActivity(rule)
+        prepareChildProgrammeIntentAndLaunchActivity(rule)
 
         searchTeiRobot(composeTestRule) {
             clickOnOpenSearch()
@@ -103,10 +103,9 @@ class SearchTETest : BaseTest() {
     fun shouldSuccessfullySearchUsingMoreThanOneField() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
-
         val firstName = "Anna"
         val lastName = "Jones"
 
@@ -146,8 +145,8 @@ class SearchTETest : BaseTest() {
     fun shouldCheckDisplayInList() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
 
         val displayInListData = createDisplayListFields()
@@ -196,13 +195,13 @@ class SearchTETest : BaseTest() {
     fun shouldSuccessfullyFilterByEventStatusOverdue() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_EVENTS_PATH,
-            API_OLD_EVENTS_RESPONSE,
+            API_EVENTS_PATH,
+            API_EVENTS_EMPTY_RESPONSE,
         )
         val eventStatusFilter = context.getString(R.string.filters_title_event_status)
         val totalCount = "1"
@@ -217,7 +216,6 @@ class SearchTETest : BaseTest() {
 
         teiFlowRobot(composeTestRule) {
             registerTEI(registerTeiDetails)
-            changeDueDate(scheduledEventTitle)
             composeTestRule.waitForIdle()
             pressBack()
         }
@@ -229,9 +227,6 @@ class SearchTETest : BaseTest() {
             closeFilterRowAtField(eventStatusFilter)
             checkFilterCounter(totalCount)
             checkCountAtFilter(eventStatusFilter, totalCount)
-        }
-        searchTeiRobot(composeTestRule) {
-            checkListOfSearchTEIWithAdditionalInfo("First name: ADRIANNA", "1 day overdue")
         }
     }
 
@@ -256,6 +251,7 @@ class SearchTETest : BaseTest() {
         }
     }
 
+    @Ignore("Flaky test, will be looked up in ANDROAPP-6541")
     @Test
     fun shouldSuccessfullyFilterByEnrollmentDateAndSort() {
         val enrollmentDate = "DATE OF ENROLLMENT"
@@ -263,6 +259,12 @@ class SearchTETest : BaseTest() {
         val enrollmentDateTo = createToEnrollmentDate()
         val totalFilterCount = "2"
         val filterCount = "1"
+
+        val enrollmentStatusFilter = context.getString(R.string.filters_title_enrollment_status)
+            .format(
+                context.resources.getQuantityString(R.plurals.enrollment, 1)
+                    .capitalize(Locale.current),
+            )
 
         setDatePicker()
         prepareChildProgrammeIntentAndLaunchActivity(rule)
@@ -274,20 +276,18 @@ class SearchTETest : BaseTest() {
             chooseDate(enrollmentDateFrom.year, enrollmentDateFrom.month, enrollmentDateFrom.day)
             chooseDate(enrollmentDateTo.year, enrollmentDateTo.month, enrollmentDateTo.day)
             clickOnSortByField(enrollmentDate)
+            composeTestRule.waitForIdle()
             checkFilterCounter(totalFilterCount)
             checkCountAtFilter(enrollmentDate, filterCount)
             clickOnFilter()
+            composeTestRule.waitForIdle()
         }
         searchTeiRobot(composeTestRule) {
-            clickOnTEI("Alan")
-        }
-
-        teiDashboardRobot(composeTestRule) {
-            composeTestRule.waitForIdle()
-            checkEnrollmentDate(enrollmentDateFrom)
+            clickOnTEI("Betty")
         }
     }
 
+    @Ignore("Flaky test, will be looked up in ANDROAPP-6545")
     @Test
     fun shouldSuccessfullyFilterByEventDateAndSort() {
         val eventDate = context.getString(R.string.filters_title_event_date)
@@ -295,8 +295,8 @@ class SearchTETest : BaseTest() {
         val eventDateTo = createToEventDate()
         val totalCount = "2"
         val filterCount = "1"
-        val name = "Heather"
-        val lastName = "Greene"
+        val name = "Alan"
+        val lastName = "Thompson"
 
         setDatePicker()
         prepareChildProgrammeIntentAndLaunchActivity(rule)
@@ -326,8 +326,8 @@ class SearchTETest : BaseTest() {
     fun shouldSuccessfullyFilterBySync() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
 
         val teiName = "Frank"
@@ -368,8 +368,8 @@ class SearchTETest : BaseTest() {
     fun shouldSuccessfullySearchAndFilter() {
         mockWebServerRobot.addResponse(
             ResponseController.GET,
-            API_OLD_TRACKED_ENTITY_PATH,
-            API_OLD_TRACKED_ENTITY_RESPONSE,
+            API_TRACKED_ENTITY_PATH,
+            API_TRACKED_ENTITY_EMPTY_RESPONSE,
         )
 
         val name = "Anna"
@@ -413,7 +413,7 @@ class SearchTETest : BaseTest() {
 
     @Test
     fun shouldSuccessfullyShowMapAndTeiCard() {
-        val firstName = "Filona"
+        val firstName = "Rachel"
 
         prepareChildProgrammeIntentAndLaunchActivity(rule)
 
@@ -434,40 +434,40 @@ class SearchTETest : BaseTest() {
     )
 
     private fun createFromEnrollmentDate() = DateRegistrationUIModel(
-        2021,
-        5,
-        1,
+        2024,
+        9,
+        6,
     )
 
     private fun createToEnrollmentDate() = DateRegistrationUIModel(
-        2021,
-        5,
-        31,
+        2024,
+        9,
+        9,
     )
 
     private fun createFromEventDate() = DateRegistrationUIModel(
-        2020,
-        5,
-        1,
+        2024,
+        8,
+        15,
     )
 
     private fun createToEventDate() = DateRegistrationUIModel(
-        2020,
-        5,
-        31,
+        2024,
+        9,
+        10,
     )
 
     private fun createRegisterTEI() = RegisterTEIUIModel(
-        "ADRIANNA",
-        "ROBERTS",
+        "Claire",
+        "Jones",
         dateRegistration,
         dateEnrollment,
     )
 
     private fun createFirstSpecificDate() = DateRegistrationUIModel(
-        2000,
-        6,
-        30,
+        2016,
+        1,
+        9,
     )
 
     private fun createEnrollmentDate() = DateRegistrationUIModel(

@@ -23,10 +23,10 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import org.dhis2.R
-import org.dhis2.commons.data.SearchTeiModel
 import org.dhis2.commons.resources.ColorUtils
 import org.dhis2.databinding.ItemSearchErrorBinding
 import org.dhis2.databinding.ItemSearchTrackedEntityBinding
+import org.dhis2.usescases.searchTrackEntity.SearchTeiModel
 import org.dhis2.usescases.searchTrackEntity.ui.mapper.TEICardMapper
 import org.hisp.dhis.mobile.ui.designsystem.component.ListCard
 import org.hisp.dhis.mobile.ui.designsystem.component.ListCardTitleModel
@@ -78,8 +78,12 @@ class SearchTeiLiveAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
+        var onlineErrorMessage: String? = null
+        if (position < snapshot().size) {
+            onlineErrorMessage = snapshot()[position]?.onlineErrorMessage
+        }
         return when {
-            snapshot()[position]?.onlineErrorMessage != null -> SearchItem.ONLINE_ERROR.ordinal
+            onlineErrorMessage != null -> SearchItem.ONLINE_ERROR.ordinal
             fromRelationship -> SearchItem.RELATIONSHIP_TEI.ordinal
             else -> SearchItem.TEI.ordinal
         }

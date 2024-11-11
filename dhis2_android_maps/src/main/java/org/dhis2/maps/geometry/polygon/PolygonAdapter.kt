@@ -6,11 +6,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Polygon
 import org.dhis2.commons.extensions.truncate
 import org.dhis2.maps.R
 import org.dhis2.maps.databinding.ItemPolygonFullBinding
+import org.dhis2.maps.model.MapData
 
 class PolygonAdapter(
     private val onAddPolygonPoint: (List<Double>) -> Unit,
@@ -44,36 +44,35 @@ class PolygonAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(getItem(position), position == itemCount - 1, position)
+        holder.bind(getItem(position))
     }
 
-    fun updateWithFeatureCollection(featureCollection: FeatureCollection?) {
+    fun updateWithFeatureCollection(mapData: MapData) {
         val data = mutableListOf<List<Double>>()
-        featureCollection?.features()?.filter { it.geometry() is Polygon }?.forEach { feature ->
-            (feature.geometry() as Polygon).coordinates().forEach { points ->
-                points.forEach {
-                    data.add(it.coordinates())
+        mapData.featureCollection.features()?.filter { it.geometry() is Polygon }
+            ?.forEach { feature ->
+                (feature.geometry() as Polygon).coordinates().forEach { points ->
+                    points.forEach {
+                        data.add(it.coordinates())
+                    }
                 }
             }
-        }
-        data.add(listOf(-1.0, -1.0))
+        submitList(data)
     }
 
     inner class Holder(val binding: ItemPolygonFullBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(point: List<Double>, isLast: Boolean, index: Int) {
+        fun bind(point: List<Double>) {
             binding.let {
-                it.isLast = isLast
-                it.coordinateValue = if (isLast) {
-                    ""
-                } else {
-                    "${point[0].truncate()}, ${point[1].truncate()}"
-                }
+                it.coordinateValue = "${point[0].truncate()}, ${point[1].truncate()}"
                 it.addPolygonButton.setOnClickListener {
                     onAddPolygonPoint(point)
                 }
                 it.removePolygonButton.setOnClickListener {
-                    onRemovePolygonPoint(index, point)
+                    val currentPosition = bindingAdapterPosition
+                    if (currentPosition != RecyclerView.NO_POSITION) {
+                        onRemovePolygonPoint(currentPosition, point)
+                    }
                 }
             }
         }

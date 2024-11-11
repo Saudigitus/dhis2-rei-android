@@ -69,6 +69,7 @@ dependencies {
     api(libs.dhis2.android.sdk) {
         exclude("org.hisp.dhis", "core-rules")
         exclude("com.facebook.flipper")
+        exclude("com.facebook.soloader")
         this.isChanging = true
     }
 
@@ -92,6 +93,9 @@ dependencies {
     api(libs.androidx.compose.paging)
 
     api(libs.google.material)
+    api(libs.androidx.material3)
+    api(libs.androidx.material3.window)
+    api(libs.androidx.material3.adaptative.android)
     api(libs.google.gson)
     api(libs.dagger)
     kapt(libs.dagger.compiler)
@@ -119,6 +123,7 @@ dependencies {
     api(libs.test.espresso.idlingresource)
     api(libs.test.espresso.idlingconcurrent)
     api(libs.analytics.sentry)
+    api(libs.analytics.sentry.compose)
     implementation(libs.github.treeView)
     api(libs.dhis2.mobile.designsystem) {
         isChanging = true

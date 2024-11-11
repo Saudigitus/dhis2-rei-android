@@ -9,8 +9,6 @@ import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Hub
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Hub
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,11 +18,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.dhis2.commons.R
+import org.dhis2.R
 import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.tracker.NavigationBarUIState
 import org.dhis2.tracker.TEIDashboardItems
+import org.dhis2.tracker.relationships.model.RelationshipTopBarIconState
 import org.dhis2.utils.AuthorityException
 import org.dhis2.utils.analytics.ACTIVE_FOLLOW_UP
 import org.dhis2.utils.analytics.AnalyticsHelper
@@ -75,11 +74,13 @@ class DashboardViewModel(
     private val _noEnrollmentSelected = MutableLiveData(false)
     val noEnrollmentSelected: LiveData<Boolean> = _noEnrollmentSelected
 
-    private val _navigationBarUIState = mutableStateOf(
-        NavigationBarUIState<TEIDashboardItems>(),
-    )
-    val navigationBarUIState: MutableState<NavigationBarUIState<TEIDashboardItems>> =
-        _navigationBarUIState
+    private val _navigationBarUIState =
+        MutableStateFlow<NavigationBarUIState<TEIDashboardItems>>(NavigationBarUIState())
+    val navigationBarUIState = _navigationBarUIState.asStateFlow()
+
+    private val _relationshipTopBarIconState =
+        MutableStateFlow<RelationshipTopBarIconState>(RelationshipTopBarIconState.List())
+    val relationshipTopBarIconState = _relationshipTopBarIconState.asStateFlow()
 
     init {
         fetchDashboardModel()
@@ -305,5 +306,9 @@ class DashboardViewModel(
                 }
             }
         }
+    }
+
+    fun updateRelationshipsTopBarIconState(state: RelationshipTopBarIconState) {
+        _relationshipTopBarIconState.value = state
     }
 }

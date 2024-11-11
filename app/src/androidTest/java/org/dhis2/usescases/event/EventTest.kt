@@ -11,7 +11,6 @@ import org.dhis2.usescases.event.entity.TEIProgramStagesUIModel
 import org.dhis2.usescases.eventsWithoutRegistration.eventCapture.EventCaptureActivity
 import org.dhis2.usescases.eventsWithoutRegistration.eventInitial.EventInitialActivity
 import org.dhis2.usescases.programEventDetail.ProgramEventDetailActivity
-import org.dhis2.usescases.programEventDetail.eventList.EventListFragment
 import org.dhis2.usescases.programevent.robot.programEventsRobot
 import org.dhis2.usescases.teiDashboard.TeiDashboardMobileActivity
 import org.dhis2.usescases.teidashboard.robot.eventRobot
@@ -52,7 +51,7 @@ class EventTest : BaseTest() {
             clickOnEventGroupByStageUsingDate(tbVisitDate)
         }
 
-        eventRegistrationRobot {
+        eventRegistrationRobot(composeTestRule) {
             openMenuMoreOptions()
             clickOnDelete()
             clickOnDeleteDialog()
@@ -65,13 +64,13 @@ class EventTest : BaseTest() {
 
     @Test
     fun shouldShowEventDetailsWhenClickOnDetailsInsideSpecificEvent() {
-        val completion = 92
-        val email = "mail@mail.com"
+        val completion = 100
+        val orgUnit = "Ngelehun CHC"
 
         prepareEventDetailsIntentAndLaunchActivity(rule)
 
-        eventRegistrationRobot {
-            checkEventDataEntryIsOpened(completion, email, composeTestRule)
+        eventRegistrationRobot(composeTestRule) {
+            checkEventDataEntryIsOpened(completion, orgUnit)
         }
     }
 
@@ -81,7 +80,7 @@ class EventTest : BaseTest() {
 
         prepareEventToShareIntentAndLaunchActivity(ruleEventDetail)
 
-        eventRegistrationRobot {
+        eventRegistrationRobot(composeTestRule) {
             openMenuMoreOptions()
             clickOnShare()
             clickOnAllQR(qrList)
@@ -124,7 +123,7 @@ class EventTest : BaseTest() {
         programEventsRobot(composeTestRule) {
             clickOnAddEvent()
         }
-        eventRegistrationRobot {
+        eventRegistrationRobot(composeTestRule) {
             clickNextButton()
         }
         eventRobot(composeTestRule) {

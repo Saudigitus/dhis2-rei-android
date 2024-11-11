@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,36 +21,38 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.databinding.DataBindingUtil
-import com.mapbox.geojson.BoundingBox
-import com.mapbox.geojson.FeatureCollection
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.mapbox.mapboxsdk.location.permissions.PermissionsManager
 import com.mapbox.mapboxsdk.maps.MapView
+import kotlinx.coroutines.launch
 import org.dhis2.R
 import org.dhis2.bindings.app
 import org.dhis2.commons.bindings.launchImageDetail
-import org.dhis2.commons.data.tuples.Trio
 import org.dhis2.commons.locationprovider.LocationSettingLauncher
 import org.dhis2.commons.resources.ColorUtils
-import org.dhis2.databinding.FragmentRelationshipsBinding
 import org.dhis2.form.model.EventMode
 import org.dhis2.maps.ExternalMapNavigation
 import org.dhis2.maps.camera.centerCameraOnFeatures
 import org.dhis2.maps.layer.MapLayerDialog
 import org.dhis2.maps.location.MapLocationEngine
 import org.dhis2.maps.managers.RelationshipMapManager
-import org.dhis2.maps.model.RelationshipUiComponentModel
+import org.dhis2.maps.views.LocationIcon
 import org.dhis2.maps.views.MapScreen
 import org.dhis2.maps.views.OnMapClickListener
+import org.dhis2.tracker.relationships.model.RelationshipTopBarIconState
+import org.dhis2.tracker.relationships.ui.DeleteRelationshipsConfirmation
+import org.dhis2.tracker.relationships.ui.RelationShipsScreen
+import org.dhis2.tracker.relationships.ui.RelationshipsUiState
+import org.dhis2.tracker.relationships.ui.RelationshipsViewModel
 import org.dhis2.ui.ThemeManager
 import org.dhis2.ui.avatar.AvatarProvider
 import org.dhis2.ui.theme.Dhis2Theme
 import org.dhis2.usescases.eventsWithoutRegistration.eventCapture.EventCaptureActivity
 import org.dhis2.usescases.general.FragmentGlobalAbstract
 import org.dhis2.usescases.teiDashboard.TeiDashboardMobileActivity
-import org.dhis2.usescases.teiDashboard.ui.NoRelationships
 import org.dhis2.utils.OnDialogClickListener
-import org.dhis2.utils.dialFloatingActionButton.DialItem
 import org.hisp.dhis.android.core.relationship.RelationshipType
 import org.hisp.dhis.mobile.ui.designsystem.component.AdditionalInfoItem
 import org.hisp.dhis.mobile.ui.designsystem.component.IconButton
@@ -59,6 +62,7 @@ import org.hisp.dhis.mobile.ui.designsystem.component.ListCardDescriptionModel
 import org.hisp.dhis.mobile.ui.designsystem.component.ListCardTitleModel
 import org.hisp.dhis.mobile.ui.designsystem.component.state.rememberAdditionalInfoColumnState
 import org.hisp.dhis.mobile.ui.designsystem.component.state.rememberListCardState
+import org.hisp.dhis.mobile.ui.designsystem.theme.TextColor
 import javax.inject.Inject
 
 class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
@@ -74,11 +78,11 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
     @Inject
     lateinit var colorUtils: ColorUtils
 
-    private lateinit var binding: FragmentRelationshipsBinding
-    private lateinit var relationshipAdapter: RelationshipAdapter
+    @Inject
+    lateinit var relationShipsViewModel: RelationshipsViewModel
+
     private var relationshipType: RelationshipType? = null
     private var relationshipMapManager: RelationshipMapManager? = null
-    private var sources: Set<String>? = null
     private lateinit var mapButtonObservable: MapButtonObservable
 
     private val addRelationshipLauncher = registerForActivityResult(AddRelationshipContract()) {
@@ -99,17 +103,21 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mapButtonObservable = context as MapButtonObservable
-        app().userComponent()?.plus(
-            RelationshipModule(
-                requireContext(),
-                this,
-                programUid(),
-                requireArguments().getString("ARG_TEI_UID"),
-                requireArguments().getString("ARG_ENROLLMENT_UID"),
-                requireArguments().getString("ARG_EVENT_UID"),
-            ),
-        )?.inject(this)
+        if (context is MapButtonObservable) {
+            mapButtonObservable = context
+            app().userComponent()?.plus(
+                RelationshipModule(
+                    requireContext(),
+                    this,
+                    programUid(),
+                    requireArguments().getString("ARG_TEI_UID"),
+                    requireArguments().getString("ARG_ENROLLMENT_UID"),
+                    requireArguments().getString("ARG_EVENT_UID"),
+                ),
+            )?.inject(this)
+        } else {
+            throw ClassCastException("$context must implement MapButtonObservable")
+        }
     }
 
     override fun onCreateView(
@@ -117,41 +125,81 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_relationships, container, false)
-
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 Dhis2Theme {
                     val showMap by mapButtonObservable.relationshipMap().observeAsState()
-                    LaunchedEffect(key1 = showMap) {
-                        presenter.takeIf { showMap == true }?.fetchMapData()
-                    }
+
+                    val uiState by relationShipsViewModel.relationshipsUiState.collectAsState()
+                    val relationshipSelectionState by relationShipsViewModel.relationshipSelectionState.collectAsState()
+                    val showDeleteConfirmation by relationShipsViewModel.showDeleteConfirmation.collectAsState()
+
                     when (showMap) {
                         true -> RelationshipMapScreen(savedInstanceState)
-                        else -> RelationshipListScreen()
+                        else -> RelationShipsScreen(
+                            uiState = uiState,
+                            relationshipSelectionState = relationshipSelectionState,
+                            onCreateRelationshipClick = {
+                                it.teiTypeUid?.let { teiTypeUid ->
+                                    goToRelationShip(
+                                        relationshipTypeModel = it.relationshipType,
+                                        teiTypeUid = teiTypeUid,
+                                    )
+                                }
+                            },
+                            onRelationshipClick = {
+                                presenter.onRelationshipClicked(
+                                    ownerType = it.ownerType,
+                                    ownerUid = it.ownerUid,
+                                )
+                            },
+                            onRelationShipSelected = relationShipsViewModel::updateSelectedList,
+                        )
+                    }
+
+                    if (showDeleteConfirmation) {
+                        (uiState as? RelationshipsUiState.Success)?.let { state ->
+                            DeleteRelationshipsConfirmation(
+                                relationships =
+                                relationshipSelectionState.selectedItems.map { selectedUid ->
+                                    state.data.first {
+                                        it.relationships.any { it.uid == selectedUid }
+                                    }.title
+                                },
+                                onDelete = {
+                                    relationShipsViewModel.deleteSelectedRelationships()
+                                },
+                                onDismiss = {
+                                    relationShipsViewModel.onDismissDelete()
+                                },
+                            )
+                        }
                     }
                 }
             }
         }
     }
 
-    @Composable
-    private fun RelationshipListScreen() {
-        val relationships by presenter.relationshipModels.observeAsState()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeRelationshipTopBarIcon()
+    }
 
-        if (relationships?.isEmpty() == true) {
-            NoRelationships()
-        } else {
-            AndroidView(factory = { _ ->
-                binding.root
-            }, update = {
-                binding.relationshipRecycler.adapter =
-                    RelationshipAdapter(presenter, colorUtils).also {
-                        it.submitList(relationships)
+    private fun observeRelationshipTopBarIcon() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                relationShipsViewModel.relationshipSelectionState.collect { selectionState ->
+                    val topBarIconState = if (selectionState.selectingMode) {
+                        RelationshipTopBarIconState.Selecting {
+                            relationShipsViewModel.onDeleteClick()
+                        }
+                    } else {
+                        RelationshipTopBarIconState.List()
                     }
-            })
+                    mapButtonObservable.updateRelationshipsTopBarIconState(topBarIconState)
+                }
+            }
         }
     }
 
@@ -165,6 +213,7 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
         }
 
         val clickedItem by presenter.mapItemClicked.observeAsState(initial = null)
+        val locationState = relationshipMapManager?.locationState?.collectAsState()
 
         LaunchedEffect(key1 = items) {
             mapData?.let { data ->
@@ -211,6 +260,7 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_layers),
                             contentDescription = "",
+                            tint = TextColor.OnPrimaryContainer,
                         )
                     },
                 ) {
@@ -223,16 +273,12 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
                         )
                     }
                 }
-                IconButton(
-                    style = IconButtonStyle.TONAL,
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_my_location),
-                            contentDescription = "",
-                        )
-                    },
-                    onClick = ::onLocationButtonClicked,
-                )
+                locationState?.let {
+                    LocationIcon(
+                        locationState = it.value,
+                        onLocationButtonClicked = ::onLocationButtonClicked,
+                    )
+                }
             },
             onItem = { item ->
                 ListCard(
@@ -257,7 +303,7 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
                         ),
                     ),
                     onCardClick = {
-                        openDashboardFor(item.uid)
+                        presenter.onMapRelationshipClicked(item.uid)
                     },
                     listAvatar = {
                         AvatarProvider(
@@ -278,7 +324,8 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
     }
 
     private fun loadMap(mapView: MapView, savedInstanceState: Bundle?) {
-        relationshipMapManager = RelationshipMapManager(mapView, MapLocationEngine(requireContext()))
+        relationshipMapManager =
+            RelationshipMapManager(mapView, MapLocationEngine(requireContext()))
         relationshipMapManager?.also {
             lifecycle.addObserver(it)
             it.onCreate(savedInstanceState)
@@ -328,6 +375,7 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
     override fun onResume() {
         super.onResume()
         presenter.init()
+        relationShipsViewModel.refreshRelationships()
     }
 
     override fun onPause() {
@@ -347,26 +395,6 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
                 teiTypeUidToAdd,
             ),
         )
-    }
-
-    override fun initFab(relationshipTypes: MutableList<Trio<RelationshipType, String, Int>>) {
-        val items: MutableList<DialItem> = ArrayList()
-        var dialItemIndex = 1
-        for (trio in relationshipTypes) {
-            val relationshipType = trio.val0()
-            val resource = trio.val2()!!
-            items.add(
-                DialItem(
-                    dialItemIndex++,
-                    relationshipType!!.displayName()!!,
-                    resource,
-                ),
-            )
-        }
-        binding.dialFabLayout.addDialItems(items) { clickedId: Int ->
-            val selectedRelationShip = relationshipTypes[clickedId - 1]
-            goToRelationShip(selectedRelationShip.val0()!!, selectedRelationShip.val1()!!)
-        }
     }
 
     private fun goToRelationShip(relationshipTypeModel: RelationshipType, teiTypeUid: String) {
@@ -436,15 +464,6 @@ class RelationshipFragment : FragmentGlobalAbstract(), RelationshipView {
                 }
             },
         )
-    }
-
-    override fun setFeatureCollection(
-        currentTei: String?,
-        relationshipsMapModels: List<RelationshipUiComponentModel>,
-        map: Pair<Map<String, FeatureCollection>, BoundingBox>,
-    ) {
-        relationshipMapManager?.update(map.first, map.second)
-        sources = map.first.keys
     }
 
     companion object {

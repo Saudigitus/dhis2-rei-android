@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dhis2.org.analytics.charts.Charts
+import org.dhis2.commons.data.ProgramConfigurationRepository
 import org.dhis2.commons.date.DateLabelProvider
 import org.dhis2.commons.date.DateUtils
 import org.dhis2.commons.di.dagger.PerActivity
@@ -24,6 +25,7 @@ import org.dhis2.commons.schedulers.SchedulerProvider
 import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.maps.usecases.MapStyleConfiguration
 import org.dhis2.maps.utils.DhisMapUtils
+import org.dhis2.tracker.data.ProfilePictureProvider
 import org.dhis2.usescases.events.EventInfoProvider
 import org.dhis2.usescases.programEventDetail.eventList.ui.mapper.EventCardMapper
 import org.dhis2.usescases.programEventDetail.usecase.CreateEventUseCase
@@ -72,14 +74,29 @@ class ProgramEventDetailModule(
         eventDetailRepository: ProgramEventDetailRepository,
         dispatcher: DispatcherProvider,
         createEventUseCase: CreateEventUseCase,
+        pageConfigurator: NavigationPageConfigurator,
+        resourceManager: ResourceManager,
+        programConfigurationRepository: ProgramConfigurationRepository,
     ): ProgramEventDetailViewModelFactory {
         return ProgramEventDetailViewModelFactory(
-            MapStyleConfiguration(d2),
+            MapStyleConfiguration(
+                d2,
+                programUid,
+                programConfigurationRepository,
+            ),
             eventDetailRepository,
             dispatcher,
             createEventUseCase,
+            pageConfigurator,
+            resourceManager,
         )
     }
+
+    @Provides
+    @PerActivity
+    fun provideProgramConfigurationRepository(
+        d2: D2,
+    ) = ProgramConfigurationRepository(d2)
 
     @Provides
     @PerActivity
@@ -120,11 +137,13 @@ class ProgramEventDetailModule(
         d2: D2,
         resourceManager: ResourceManager,
         metadataIconProvider: MetadataIconProvider,
+        profilePictureProvider: ProfilePictureProvider,
     ) = EventInfoProvider(
         d2,
         resourceManager,
         DateLabelProvider(context, resourceManager),
         metadataIconProvider,
+        profilePictureProvider,
     )
 
     @Provides
@@ -178,4 +197,8 @@ class ProgramEventDetailModule(
     @PerActivity
     fun provideOURepositoryConfiguration(d2: D2) =
         OURepositoryConfiguration(d2, orgUnitSelectorScope)
+
+    @Provides
+    @PerActivity
+    fun provideProfilePictureProvider(d2: D2) = ProfilePictureProvider(d2)
 }

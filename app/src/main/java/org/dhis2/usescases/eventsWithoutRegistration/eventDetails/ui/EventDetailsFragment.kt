@@ -181,9 +181,11 @@ class EventDetailsFragment : FragmentGlobalAbstract() {
         viewModel.requestLocationByMap = { featureType, initCoordinate ->
             requestLocationByMap.launch(
                 MapSelectorActivity.create(
-                    requireActivity(),
-                    FeatureType.valueOfFeatureType(featureType),
-                    initCoordinate,
+                    activity = requireActivity(),
+                    fieldUid = null,
+                    locationType = FeatureType.valueOfFeatureType(featureType),
+                    initialData = initCoordinate,
+                    programUid = requireArguments().getString(PROGRAM_UID),
                 ),
             )
         }

@@ -1,13 +1,25 @@
 package org.dhis2.usescases.eventsWithoutRegistration.eventCapture
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.DeleteForever
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,23 +31,23 @@ import com.google.android.material.snackbar.Snackbar
 import org.dhis2.R
 import org.dhis2.bindings.app
 import org.dhis2.commons.Constants
+import org.dhis2.commons.animations.hide
+import org.dhis2.commons.animations.show
 import org.dhis2.commons.dialogs.AlertBottomDialog
 import org.dhis2.commons.dialogs.CustomDialog
 import org.dhis2.commons.dialogs.DialogClickListener
-import org.dhis2.commons.popupmenu.AppMenuHelper
 import org.dhis2.commons.resources.EventResourcesProvider
 import org.dhis2.commons.sync.OnDismissListener
 import org.dhis2.commons.sync.SyncContext
 import org.dhis2.databinding.ActivityEventCaptureBinding
 import org.dhis2.form.model.EventMode
-import org.dhis2.ui.ErrorFieldList
+import org.dhis2.tracker.relationships.model.RelationshipTopBarIconState
 import org.dhis2.ui.ThemeManager
 import org.dhis2.ui.dialogs.bottomsheet.BottomSheetDialog
 import org.dhis2.ui.dialogs.bottomsheet.BottomSheetDialogUiModel
 import org.dhis2.ui.dialogs.bottomsheet.DialogButtonStyle.DiscardButton
 import org.dhis2.ui.dialogs.bottomsheet.DialogButtonStyle.MainButton
 import org.dhis2.usescases.eventsWithoutRegistration.eventCapture.eventCaptureFragment.EventCaptureFormFragment
-import org.dhis2.usescases.eventsWithoutRegistration.eventCapture.model.EventCompletionDialog
 import org.dhis2.usescases.eventsWithoutRegistration.eventDetails.injection.EventDetailsComponent
 import org.dhis2.usescases.eventsWithoutRegistration.eventDetails.injection.EventDetailsComponentProvider
 import org.dhis2.usescases.eventsWithoutRegistration.eventDetails.injection.EventDetailsModule
@@ -45,17 +57,23 @@ import org.dhis2.usescases.teiDashboard.DashboardViewModel
 import org.dhis2.usescases.teiDashboard.dashboardfragments.relationships.MapButtonObservable
 import org.dhis2.usescases.teiDashboard.dashboardfragments.teidata.TEIDataActivityContract
 import org.dhis2.usescases.teiDashboard.dashboardfragments.teidata.TEIDataFragment.Companion.newInstance
+import org.dhis2.usescases.teiDashboard.ui.RelationshipTopBarIcon
 import org.dhis2.utils.analytics.CLICK
 import org.dhis2.utils.analytics.DELETE_EVENT
 import org.dhis2.utils.analytics.SHOW_HELP
-import org.dhis2.utils.customviews.FormBottomDialog
-import org.dhis2.utils.customviews.FormBottomDialog.Companion.instance
+import org.dhis2.utils.customviews.MoreOptionsWithDropDownMenuButton
+import org.dhis2.utils.customviews.navigationbar.NavigationPage
 import org.dhis2.utils.customviews.navigationbar.NavigationPageConfigurator
 import org.dhis2.utils.granularsync.OPEN_ERROR_LOCATION
 import org.dhis2.utils.granularsync.SyncStatusDialog
 import org.dhis2.utils.granularsync.shouldLaunchSyncDialog
 import org.dhis2.utils.isLandscape
 import org.dhis2.utils.isPortrait
+import org.hisp.dhis.mobile.ui.designsystem.component.menu.MenuItemData
+import org.hisp.dhis.mobile.ui.designsystem.component.menu.MenuItemStyle
+import org.hisp.dhis.mobile.ui.designsystem.component.menu.MenuLeadingElement
+import org.hisp.dhis.mobile.ui.designsystem.component.navigationBar.NavigationBar
+import org.hisp.dhis.mobile.ui.designsystem.theme.DHIS2Theme
 import javax.inject.Inject
 
 class EventCaptureActivity :
@@ -77,7 +95,7 @@ class EventCaptureActivity :
     @Inject
     var themeManager: ThemeManager? = null
     private var isEventCompleted = false
-    private var eventMode: EventMode? = null
+    private lateinit var eventMode: EventMode
 
     @Inject
     lateinit var eventResourcesProvider: EventResourcesProvider
@@ -95,7 +113,7 @@ class EventCaptureActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         eventUid = intent.getStringExtra(Constants.EVENT_UID)
         programUid = intent.getStringExtra(Constants.PROGRAM_UID)
-        setUpEventCaptureComponent(eventUid)
+        setUpEventCaptureComponent(eventUid!!)
         teiUid = presenter.getTeiUid()
         enrollmentUid = presenter.getEnrollmentUid()
         themeManager!!.setProgramTheme(intent.getStringExtra(Constants.PROGRAM_UID)!!)
@@ -106,9 +124,11 @@ class EventCaptureActivity :
             this.isLandscape() -> binding.eventViewLandPager
             else -> binding.eventViewPager
         }
-        eventMode = intent.getSerializableExtra(Constants.EVENT_MODE) as EventMode?
+        eventMode = intent.getSerializableExtra(Constants.EVENT_MODE) as EventMode
         setUpViewPagerAdapter()
         setUpNavigationBar()
+        setupMoreOptionsMenu()
+
         setUpEventCaptureFormLandscape(eventUid ?: "")
         if (this.isLandscape() && areTeiUidAndEnrollmentUidNotNull()) {
             val viewModelFactory = this.app().dashboardComponent()?.dashboardViewModelFactory()
@@ -116,7 +136,9 @@ class EventCaptureActivity :
             viewModelFactory?.let {
                 dashboardViewModel =
                     ViewModelProvider(this, viewModelFactory)[DashboardViewModel::class.java]
-                supportFragmentManager.beginTransaction().replace(R.id.tei_column, newInstance(programUid, teiUid, enrollmentUid)).commit()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.tei_column, newInstance(programUid, teiUid, enrollmentUid))
+                    .commit()
                 dashboardViewModel?.updateSelectedEventUid(eventUid)
             }
         }
@@ -134,8 +156,8 @@ class EventCaptureActivity :
         eventViewPager?.isUserInputEnabled = false
         adapter = EventCapturePagerAdapter(
             this,
-            intent.getStringExtra(Constants.PROGRAM_UID),
-            intent.getStringExtra(Constants.EVENT_UID),
+            intent.getStringExtra(Constants.PROGRAM_UID) ?: "",
+            intent.getStringExtra(Constants.EVENT_UID) ?: "",
             pageConfigurator!!.displayAnalytics(),
             pageConfigurator!!.displayRelationships(),
             intent.getBooleanExtra(OPEN_ERROR_LOCATION, false),
@@ -158,30 +180,55 @@ class EventCaptureActivity :
     }
 
     private fun setUpNavigationBar() {
-        binding.navigationBar.pageConfiguration(pageConfigurator!!)
         eventViewPager?.registerOnPageChangeCallback(
             object : OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    binding.navigationBar.selectItemAt(position)
+                    presenter.onSetNavigationPage(position)
                 }
             },
         )
-        binding.navigationBar.setOnItemSelectedListener { item: MenuItem ->
-            eventViewPager?.currentItem = adapter!!.getDynamicTabIndex(item.itemId)
-            true
+        binding.navigationBar.setContent {
+            DHIS2Theme {
+                val uiState by presenter.observeNavigationBarUIState()
+                val selectedItemIndex by remember(uiState) {
+                    mutableIntStateOf(
+                        uiState.items.indexOfFirst {
+                            it.id == uiState.selectedItem
+                        },
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = uiState.items.isNotEmpty(),
+                    enter = slideInVertically { it },
+                    exit = slideOutVertically { it },
+                ) {
+                    NavigationBar(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = uiState.items,
+                        selectedItemIndex = selectedItemIndex,
+                    ) { page ->
+                        presenter.onNavigationPageChanged(page)
+                        eventViewPager?.currentItem = adapter!!.getDynamicTabIndex(page)
+                    }
+                }
+            }
         }
     }
 
     private fun setUpEventCaptureFormLandscape(eventUid: String) {
         if (this.isLandscape()) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.event_form, EventCaptureFormFragment.newInstance(eventUid, false, eventMode))
+                .replace(
+                    R.id.event_form,
+                    EventCaptureFormFragment.newInstance(eventUid, false, eventMode),
+                )
                 .commit()
         }
     }
 
-    private fun setUpEventCaptureComponent(eventUid: String?) {
+    private fun setUpEventCaptureComponent(eventUid: String) {
         eventCaptureComponent = app().userComponent()!!.plus(
             EventCaptureModule(
                 this,
@@ -210,7 +257,7 @@ class EventCaptureActivity :
     }
 
     fun openDetails() {
-        binding.navigationBar.selectItemAt(0)
+        presenter.onNavigationPageChanged(NavigationPage.DETAILS)
     }
 
     fun openForm() {
@@ -219,14 +266,15 @@ class EventCaptureActivity :
                 it.dismiss()
             }
         }
-        binding.navigationBar.selectItemAt(1)
+        presenter.onNavigationPageChanged(NavigationPage.DATA_ENTRY)
     }
 
     override fun onResume() {
         super.onResume()
         presenter.refreshTabCounters()
         with(dashboardViewModel) {
-            this?.selectedEventUid()?.observe(this@EventCaptureActivity, ::updateLandscapeViewsOnEventChange)
+            this?.selectedEventUid()
+                ?.observe(this@EventCaptureActivity, ::updateLandscapeViewsOnEventChange)
         }
     }
 
@@ -239,13 +287,14 @@ class EventCaptureActivity :
         onBackPressed()
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         finishEditMode()
     }
 
     private fun finishEditMode() {
-        if (binding.navigationBar.isHidden()) {
+        if (binding.navigationBar.visibility == View.GONE) {
             showNavigationBar()
         } else {
             attemptFinish()
@@ -291,76 +340,9 @@ class EventCaptureActivity :
         }
     }
 
-    override fun showCompleteActions(eventCompletionDialog: EventCompletionDialog) {
-        val dialog = BottomSheetDialog(
-            bottomSheetDialogUiModel = eventCompletionDialog.bottomSheetDialogUiModel,
-            onMainButtonClicked = {
-                setAction(eventCompletionDialog.mainButtonAction)
-            },
-            onSecondaryButtonClicked = {
-                eventCompletionDialog.secondaryButtonAction?.let { setAction(it) }
-            },
-            content = if (eventCompletionDialog.fieldsWithIssues.isNotEmpty()) {
-                { bottomSheetDialog ->
-                    ErrorFieldList(eventCompletionDialog.fieldsWithIssues) {
-                        bottomSheetDialog.dismiss()
-                    }
-                }
-            } else {
-                null
-            },
-        )
-        if (binding.navigationBar.selectedItemId == R.id.navigation_data_entry) {
-            dialog.show(supportFragmentManager, SHOW_OPTIONS)
-        }
-        if (this.isLandscape()) {
-            dialog.show(supportFragmentManager, SHOW_OPTIONS)
-        }
-    }
-
     override fun saveAndFinish() {
         displayMessage(getString(R.string.saved))
-        setAction(FormBottomDialog.ActionType.FINISH)
-    }
-
-    override fun attemptToSkip() {
-        instance
-            .setAccessDataWrite(presenter.canWrite())
-            .setIsExpired(presenter.hasExpired())
-            .setSkip(true)
-            .setListener { actionType: FormBottomDialog.ActionType -> setAction(actionType) }
-            .show(supportFragmentManager, SHOW_OPTIONS)
-    }
-
-    override fun attemptToReschedule() {
-        instance
-            .setAccessDataWrite(presenter.canWrite())
-            .setIsExpired(presenter.hasExpired())
-            .setReschedule(true)
-            .setListener { actionType: FormBottomDialog.ActionType -> setAction(actionType) }
-            .show(supportFragmentManager, SHOW_OPTIONS)
-    }
-
-    private fun setAction(actionType: FormBottomDialog.ActionType) {
-        when (actionType) {
-            FormBottomDialog.ActionType.COMPLETE -> {
-                isEventCompleted = true
-                presenter.completeEvent(false)
-            }
-
-            FormBottomDialog.ActionType.COMPLETE_ADD_NEW -> presenter.completeEvent(true)
-            FormBottomDialog.ActionType.FINISH_ADD_NEW -> restartDataEntry()
-            FormBottomDialog.ActionType.SKIP -> presenter.skipEvent()
-            FormBottomDialog.ActionType.RESCHEDULE -> { // Do nothing
-            }
-
-            FormBottomDialog.ActionType.CHECK_FIELDS -> { // Do nothing
-            }
-
-            FormBottomDialog.ActionType.FINISH -> finishDataEntry()
-            FormBottomDialog.ActionType.NONE -> { // Do nothing
-            }
-        }
+        finishDataEntry()
     }
 
     override fun showSnackBar(messageId: Int, programStage: String) {
@@ -396,28 +378,47 @@ class EventCaptureActivity :
         binding.programStageName.text = stageName
     }
 
-    override fun showMoreOptions(view: View) {
-        AppMenuHelper.Builder().menu(this, R.menu.event_menu).anchor(view)
-            .onMenuInflated { popupMenu: PopupMenu ->
-                popupMenu.menu.findItem(R.id.menu_delete).isVisible =
-                    presenter.canWrite() && presenter.isEnrollmentOpen()
-                popupMenu.menu.findItem(R.id.menu_share).isVisible = false
-            }
-            .onMenuItemClicked { itemId: Int? ->
+    private fun setupMoreOptionsMenu() {
+        binding.moreOptions.setContent {
+            var expanded by remember { mutableStateOf(false) }
+
+            MoreOptionsWithDropDownMenuButton(
+                getMenuItems(),
+                expanded,
+                onMenuToggle = { expanded = it },
+            ) { itemId ->
                 when (itemId) {
-                    R.id.showHelp -> {
+                    EventCaptureMenuItem.SHOW_HELP -> {
                         analyticsHelper().setEvent(SHOW_HELP, CLICK, SHOW_HELP)
                         showTutorial(false)
                     }
 
-                    R.id.menu_delete -> confirmDeleteEvent()
-                    else -> { // Do nothing
-                    }
+                    EventCaptureMenuItem.DELETE -> confirmDeleteEvent()
                 }
-                false
             }
-            .build()
-            .show()
+        }
+    }
+
+    private fun getMenuItems(): List<MenuItemData<EventCaptureMenuItem>> {
+        return buildList {
+            add(
+                MenuItemData(
+                    id = EventCaptureMenuItem.SHOW_HELP,
+                    label = getString(R.string.showHelp),
+                    leadingElement = MenuLeadingElement.Icon(icon = Icons.AutoMirrored.Outlined.HelpOutline),
+                ),
+            )
+            if (presenter.canWrite() && presenter.isEnrollmentOpen()) {
+                add(
+                    MenuItemData(
+                        id = EventCaptureMenuItem.DELETE,
+                        label = getString(R.string.delete),
+                        style = MenuItemStyle.ALERT,
+                        leadingElement = MenuLeadingElement.Icon(icon = Icons.Outlined.DeleteForever),
+                    ),
+                )
+            }
+        }
     }
 
     override fun showTutorial(shaked: Boolean) {
@@ -467,14 +468,16 @@ class EventCaptureActivity :
             )
             .setPositiveButton(
                 R.string.change_event_date,
-            ) { _, _ -> binding.navigationBar.selectItemAt(0) }
+            ) { _, _ ->
+                presenter.onSetNavigationPage(0)
+            }
             .setNegativeButton(R.string.go_back) { _, _ -> back() }
             .setCancelable(false)
             .show()
     }
 
     override fun updateNoteBadge(numberOfNotes: Int) {
-        binding.navigationBar.updateBadge(R.id.navigation_notes, numberOfNotes)
+        presenter.updateNotesBadge(numberOfNotes)
     }
 
     override fun showProgress() {
@@ -502,6 +505,25 @@ class EventCaptureActivity :
 
     override fun onRelationshipMapLoaded() {
         // there are no relationships on events
+    }
+
+    override fun updateRelationshipsTopBarIconState(topBarIconState: RelationshipTopBarIconState) {
+        when (topBarIconState) {
+            is RelationshipTopBarIconState.Selecting -> {
+                binding.relationshipIcon.visibility = View.VISIBLE
+                binding.relationshipIcon.setContent {
+                    RelationshipTopBarIcon(
+                        relationshipTopBarIconState = topBarIconState,
+                    ) {
+                        topBarIconState.onClickListener()
+                    }
+                }
+            }
+
+            else -> {
+                binding.relationshipIcon.visibility = View.GONE
+            }
+        }
     }
 
     override fun provideEventDetailsComponent(module: EventDetailsModule?): EventDetailsComponent? {
@@ -591,4 +613,9 @@ class EventCaptureActivity :
             }
         }
     }
+}
+
+enum class EventCaptureMenuItem {
+    SHOW_HELP,
+    DELETE,
 }

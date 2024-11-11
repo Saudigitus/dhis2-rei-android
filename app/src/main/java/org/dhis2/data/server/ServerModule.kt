@@ -20,6 +20,7 @@ import org.dhis2.commons.resources.EventResourcesProvider
 import org.dhis2.commons.resources.MetadataIconProvider
 import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.commons.schedulers.SchedulerProvider
+import org.dhis2.commons.viewmodel.DispatcherProvider
 import org.dhis2.data.service.SyncStatusController
 import org.dhis2.data.service.VersionRepository
 import org.dhis2.form.data.FileController
@@ -123,8 +124,8 @@ class ServerModule {
 
     @Provides
     @PerServer
-    fun providesSyncStatusController(): SyncStatusController {
-        return SyncStatusController()
+    fun providesSyncStatusController(dispatcherProvider: DispatcherProvider): SyncStatusController {
+        return SyncStatusController(dispatcherProvider)
     }
 
     @Provides
@@ -176,9 +177,6 @@ class ServerModule {
         fun getD2Configuration(context: Context): D2Configuration {
             val interceptors: MutableList<Interceptor> =
                 ArrayList()
-            context.app().appInspector.flipperInterceptor?.let { flipperInterceptor ->
-                interceptors.add(flipperInterceptor)
-            }
             interceptors.add(
                 AnalyticsInterceptor(
                     AnalyticsHelper(context.app().appComponent().matomoController()),

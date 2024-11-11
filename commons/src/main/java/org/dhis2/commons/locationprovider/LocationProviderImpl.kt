@@ -8,8 +8,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 import androidx.core.app.ActivityCompat
+import androidx.core.location.LocationListenerCompat
 
 private const val FUSED_LOCATION_PROVIDER = "fused"
 
@@ -27,6 +27,8 @@ open class LocationProviderImpl(val context: Context) : LocationProvider {
 
     private var locationListener: LocationListener? = null
 
+    private var updatesEnabled: Boolean = false
+
     @SuppressLint("MissingPermission")
     override fun getLastKnownLocation(
         onNewLocation: (Location) -> Unit,
@@ -37,45 +39,49 @@ open class LocationProviderImpl(val context: Context) : LocationProvider {
             onPermissionNeeded()
         } else if (!hasLocationEnabled()) {
             onLocationDisabled()
-            requestLocationUpdates(onNewLocation)
         } else {
             locationManager.getLastKnownLocation(locationProvider).apply {
                 if (this != null && latitude != 0.0 && longitude != 0.0) {
                     onNewLocation(this)
                 }
-                requestLocationUpdates(onNewLocation)
             }
+            requestLocationUpdates(onNewLocation, onLocationDisabled)
         }
     }
 
     @SuppressLint("MissingPermission")
-    private fun requestLocationUpdates(onNewLocation: (Location) -> Unit) {
+    private fun requestLocationUpdates(
+        onNewLocation: (Location) -> Unit,
+        onLocationProviderChanged: () -> Unit,
+    ) {
         if (hasPermission()) {
-            locationListener = object : LocationListener {
+            locationListener = object : LocationListenerCompat {
                 override fun onLocationChanged(location: Location) {
                     onNewLocation(location)
                 }
 
                 override fun onProviderEnabled(provider: String) {
-                    // Need implementation for compatibility
+                    onLocationProviderChanged()
                 }
 
                 override fun onProviderDisabled(provider: String) {
-                    // Need implementation for compatibility
-                }
-
-                @Deprecated("Deprecated in Java")
-                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                    // Need implementation for compatibility
+                    onLocationProviderChanged()
                 }
             }
-
             locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                1000,
-                1f,
+                LocationManager.NETWORK_PROVIDER,
+                500,
+                0f,
                 requireNotNull(locationListener),
             )
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                500,
+                0f,
+                requireNotNull(locationListener),
+            )
+
+            updatesEnabled = true
         }
     }
 
@@ -94,6 +100,9 @@ open class LocationProviderImpl(val context: Context) : LocationProvider {
     override fun stopLocationUpdates() {
         locationListener?.let {
             locationManager.removeUpdates(it)
+            updatesEnabled = false
         }
     }
+
+    override fun hasUpdatesEnabled() = updatesEnabled
 }

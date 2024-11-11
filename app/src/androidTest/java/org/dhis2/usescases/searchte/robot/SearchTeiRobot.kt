@@ -48,9 +48,7 @@ fun searchTeiRobot(
 class SearchTeiRobot(val composeTestRule: ComposeTestRule) : BaseRobot() {
 
     fun clickOnTEI(teiName: String) {
-        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("First name: $teiName", true).performClick()
-        composeTestRule.waitForIdle()
     }
 
     fun checkTEIsDelete(teiName: String, teiLastName: String) {
@@ -158,7 +156,7 @@ class SearchTeiRobot(val composeTestRule: ComposeTestRule) : BaseRobot() {
     }
 
     fun clickOnShowMap() {
-        waitForView(withId(R.id.navigation_map_view)).perform(click())
+        composeTestRule.onNodeWithTag("NAVIGATION_BAR_ITEM_Map").performClick()
     }
 
     fun checkCarouselTEICardInfo(firstName: String) {
