@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.hisp.dhis.mobile.ui.designsystem.theme.SurfaceColor
@@ -34,7 +33,7 @@ import org.saudigitus.rei.ui.components.HomeStageCardState
 @Stable
 data class StageTabState(
     val stages: List<Stage> = emptyList(),
-    val stagesData: List<Triple<String, Int, Color>> = emptyList(),
+    val stagesData: List<Triple<String, String, Color>> = emptyList(),
 )
 
 @Composable
@@ -96,7 +95,7 @@ fun StageTab(
                         modifier = Modifier.size(120.dp),
                         state = HomeStageCardState(
                             title = it.first.ifEmpty { "0" },
-                            subtitle = stringResource(it.second),
+                            subtitle = it.second,
                             bottomColor = it.third,
                         ),
                     )

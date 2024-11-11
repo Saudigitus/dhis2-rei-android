@@ -9,4 +9,6 @@ data class StageItem(
     val color: String,
     @JsonProperty("label")
     val label: String,
+    @JsonProperty("pos")
+    val pos: Int,
 )
