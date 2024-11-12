@@ -1,7 +1,6 @@
-package org.saudigitus.rei.utils
+package org.dhis2.usescases.searchTrackEntity
 
 import androidx.compose.ui.graphics.Color
-import org.dhis2.commons.data.SearchTeiModel
 import org.hisp.dhis.android.core.D2
 import org.saudigitus.rei.R
 import org.saudigitus.rei.data.model.AppConfigItem
@@ -9,8 +8,11 @@ import org.saudigitus.rei.data.model.LineListing
 import org.saudigitus.rei.ui.theme.Light_Error
 import org.saudigitus.rei.ui.theme.Light_Success
 import org.saudigitus.rei.ui.theme.Light_Warning
+import org.saudigitus.rei.utils.eventOrderedByDateDesc
+import org.saudigitus.rei.utils.isEventOverdue
+import org.saudigitus.rei.utils.reiModuleDatastore
 
-class SearchTeiStyle(private val d2: D2) {
+class ReiSearchTeiStyle(private val d2: D2) {
 
     private var appConfigs: List<AppConfigItem> = emptyList()
 

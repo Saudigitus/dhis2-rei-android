@@ -22,6 +22,7 @@ import org.dhis2.commons.date.toDateSpan
 import org.dhis2.commons.date.toOverdueOrScheduledUiText
 import org.dhis2.commons.resources.ResourceManager
 import org.dhis2.commons.ui.model.ListCardUiModel
+import org.dhis2.usescases.searchTrackEntity.ReiSearchTeiStyle
 import org.dhis2.usescases.searchTrackEntity.SearchTeiModel
 import org.hisp.dhis.android.core.common.State
 import org.hisp.dhis.android.core.enrollment.Enrollment
@@ -36,14 +37,13 @@ import org.hisp.dhis.mobile.ui.designsystem.component.ButtonStyle
 import org.hisp.dhis.mobile.ui.designsystem.component.MetadataAvatarSize
 import org.hisp.dhis.mobile.ui.designsystem.theme.SurfaceColor
 import org.hisp.dhis.mobile.ui.designsystem.theme.TextColor
-import org.saudigitus.rei.utils.SearchTeiStyle
 import java.io.File
 import java.util.Date
 
 class TEICardMapper(
     val context: Context,
     val resourceManager: ResourceManager,
-    private val searchTeiStyle: SearchTeiStyle,
+    private val searchTeiStyle: ReiSearchTeiStyle,
 ) {
 
     fun map(
